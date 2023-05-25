@@ -39,7 +39,7 @@ class _QuestionnaireCompleteButtonState
         }
 
         final newResponseStatus = (currentResponseStatus.value == 'completed')
-            ? Code('in_progress')
+            ? Code('in-progress')
             : Code('completed');
 
         setState(() {
