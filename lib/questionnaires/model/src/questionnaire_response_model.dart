@@ -458,7 +458,7 @@ class QuestionnaireResponseModel {
   int get generation => _generation;
 
   final responseStatusNotifier = ValueNotifier<Code>(
-    Code('in_progress'),
+    Code('in-progress'),
   );
 
   Code get responseStatus => responseStatusNotifier.value;
@@ -598,7 +598,7 @@ class QuestionnaireResponseModel {
       questionnaireResponseItems,
     );
 
-    responseStatus = questionnaireResponse.status ?? Code('in_progress');
+    responseStatus = questionnaireResponse.status ?? Code('in-progress');
   }
 
   void _updateCalculations() {
