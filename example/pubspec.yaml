@@ -9,7 +9,7 @@ dependencies:
   collection: ^1.17.0
   faiadashu:
     path: ..
-  fhir: ^0.11.0
+  fhir: ^0.12.1
   flutter:
     sdk: flutter
   flutter_localizations:
