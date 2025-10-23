@@ -14,10 +14,10 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  google_fonts: ^4.0.4
-  intl: ^0.18.0
+  google_fonts: ^6.3.2
+  intl: ^0.20.2
   logging: ^1.0.2
-  simple_html_css: ^4.0.0
+  simple_html_css: ^5.0.0
 
 dev_dependencies:
   lint: ^2.0.1

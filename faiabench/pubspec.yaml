@@ -33,12 +33,12 @@ dependencies:
   flutter_highlight: ^0.7.0
   flutter_localizations:
     sdk: flutter
-  flutter_riverpod: ^2.3.0
+  flutter_riverpod: ^3.0.3
   highlight: ^0.7.0
-  intl: ^0.18.0
+  intl: ^0.20.2
   logging: ^1.0.1
-  multi_split_view: ^2.0.0
-  simple_html_css: ^4.0.0
+  multi_split_view: ^3.6.1
+  simple_html_css: ^5.0.0
 
 dev_dependencies:
   lint: ^2.0.1
