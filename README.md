@@ -26,6 +26,19 @@ Build beautiful healthcare apps fast — use the Flutter™ SDK and follow the H
 ![Screenshot](https://user-images.githubusercontent.com/16414047/112978818-12977f00-9158-11eb-8e1c-6772dcc3270a.png)
 
 
+## Usage
+To use fhir_0.12.0 version with latest `intl` and `freezed_annotation`, override these dependencies in your `pubspec.yaml`:
+```yaml
+dependency_overrides:
+  intl: ^0.20.2
+  freezed_annotation: ^3.0.0
+```
+
+`fhir: ^0.12.0` uses older freezed_annotation version.
+
+> [!WARNING]
+> Overriding dependencies can lead to runtime errors and app crashes. It’s a risky move, so please exercise caution. Additionally, there’s no guarantee that the package will work smoothly with the latest versions of `intl` and `freezed_annotation`. Before making any changes, it’s best to double-check locally to ensure everything works correctly before rolling them out to your users.
+
 ### Development overview
 [Development Overview](doc/overview.md) - Learn how to use the Faidashu FHIRDash library in your own projects.
 
