@@ -11,7 +11,7 @@ class FDashLocalizationsJa extends FDashLocalizations {
   String get validatorRequiredItem => 'この質問は完了する必要があります。';
 
   @override
-  String validatorMinLength(int minLength) {
+  String validatorMinLength(num minLength) {
     return intl.Intl.pluralLogic(
       minLength,
       locale: localeName,
@@ -21,7 +21,7 @@ class FDashLocalizationsJa extends FDashLocalizations {
   }
 
   @override
-  String validatorMaxLength(int maxLength) {
+  String validatorMaxLength(num maxLength) {
     return intl.Intl.pluralLogic(
       maxLength,
       locale: localeName,
@@ -78,7 +78,7 @@ class FDashLocalizationsJa extends FDashLocalizations {
   String get validatorDateTime => '有効な日付と時刻を入力してください。';
 
   @override
-  String validatorMinOccurs(int minOccurs) {
+  String validatorMinOccurs(num minOccurs) {
     final String pluralString = intl.Intl.pluralLogic(
       minOccurs,
       locale: localeName,
@@ -90,7 +90,7 @@ class FDashLocalizationsJa extends FDashLocalizations {
   }
 
   @override
-  String validatorMaxOccurs(int maxOccurs) {
+  String validatorMaxOccurs(num maxOccurs) {
     final String pluralString = intl.Intl.pluralLogic(
       maxOccurs,
       locale: localeName,

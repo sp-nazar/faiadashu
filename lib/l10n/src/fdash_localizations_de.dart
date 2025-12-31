@@ -11,7 +11,7 @@ class FDashLocalizationsDe extends FDashLocalizations {
   String get validatorRequiredItem => 'Füllen sie dieses Pflichtfeld aus.';
 
   @override
-  String validatorMinLength(int minLength) {
+  String validatorMinLength(num minLength) {
     return intl.Intl.pluralLogic(
       minLength,
       locale: localeName,
@@ -20,7 +20,7 @@ class FDashLocalizationsDe extends FDashLocalizations {
   }
 
   @override
-  String validatorMaxLength(int maxLength) {
+  String validatorMaxLength(num maxLength) {
     return intl.Intl.pluralLogic(
       maxLength,
       locale: localeName,
@@ -77,7 +77,7 @@ class FDashLocalizationsDe extends FDashLocalizations {
   String get validatorDateTime => 'Gültiges Datum/Zeit eingeben.';
 
   @override
-  String validatorMinOccurs(int minOccurs) {
+  String validatorMinOccurs(num minOccurs) {
     return intl.Intl.pluralLogic(
       minOccurs,
       locale: localeName,
@@ -87,7 +87,7 @@ class FDashLocalizationsDe extends FDashLocalizations {
   }
 
   @override
-  String validatorMaxOccurs(int maxOccurs) {
+  String validatorMaxOccurs(num maxOccurs) {
     return intl.Intl.pluralLogic(
       maxOccurs,
       locale: localeName,
