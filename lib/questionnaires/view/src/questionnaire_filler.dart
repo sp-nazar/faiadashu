@@ -25,7 +25,7 @@ class QuestionnaireResponseFiller extends StatefulWidget {
   final LaunchContext launchContext;
 
   Future<QuestionnaireResponseModel>
-      _createQuestionnaireResponseModel() async =>
+      _createQuestionnaireResponseModel() =>
           QuestionnaireResponseModel.fromFhirResourceBundle(
             locale: locale,
             aggregators: aggregators,

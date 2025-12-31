@@ -154,7 +154,7 @@ class _QuestionnaireItemFillerHelpState
   Future<void> _showHelp(
     BuildContext context,
     QuestionnaireItemModel questionnaireItemModel,
-  ) async {
+  ) {
     return showDialog(
       context: context,
       builder: (context) {
