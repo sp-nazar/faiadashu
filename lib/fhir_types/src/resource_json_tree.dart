@@ -310,6 +310,9 @@ class _JsonViewerGenericNode extends StatelessWidget {
                       text: nodeValue.toString(),
                     ),
                   ).then((_) {
+                    if (!context.mounted) {
+                      return;
+                    }
                     final messenger = ScaffoldMessenger.maybeOf(context);
                     messenger?.clearSnackBars();
                     messenger?.showSnackBar(

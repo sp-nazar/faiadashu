@@ -76,6 +76,9 @@ class _NarrativeDrawerState extends State<NarrativeDrawer> {
                                     ?.div ?? '',
                           ),
                         ).then((_) {
+                          if (!context.mounted) {
+                            return;
+                          }
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: _drawerMode
