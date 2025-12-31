@@ -7,6 +7,7 @@ class CodingAnswerFiller extends QuestionnaireAnswerFiller {
     super.answerModel, {
     super.key,
   });
+
   @override
   State<StatefulWidget> createState() => _CodingAnswerState();
 }
@@ -222,18 +223,9 @@ class _NullRadioChoice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RadioListTile<String?>(
-      title: const NullDashText(),
+    return const RadioListTile<String?>(
+      title: NullDashText(),
       value: null,
-      groupValue: answerModel.singleSelectionUid,
-      onChanged: (answerModel.isControlEnabled)
-          ? (String? newValue) {
-              answerModel.value = OptionsOrString.fromSelectionsAndStrings(
-                answerModel.selectOption(newValue),
-                answerModel.value?.openStrings,
-              );
-            }
-          : null,
     );
   }
 }
@@ -247,7 +239,7 @@ class _RadioChoice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Focus(
-      child: RadioListTile<String>(
+      child: RadioListTile<String?>(
         title: _StyledOption(
           answerModel,
           answerOption,
@@ -255,16 +247,6 @@ class _RadioChoice extends StatelessWidget {
         value: answerOption.uid,
         // allows value to be set to null on repeat tap
         toggleable: true,
-        groupValue: answerModel.singleSelectionUid,
-        onChanged: (answerModel.isControlEnabled)
-            ? (String? newValue) {
-                Focus.of(context).requestFocus();
-                answerModel.value = OptionsOrString.fromSelectionsAndStrings(
-                  answerModel.selectOption(newValue),
-                  answerModel.value?.openStrings,
-                );
-              }
-            : null,
       ),
     );
   }
@@ -296,7 +278,7 @@ class _CodingDropdown extends AnswerInputControl<CodingAnswerModel> {
       padding: const EdgeInsets.only(top: 8.0),
       child: DropdownButtonFormField<String>(
         isExpanded: true,
-        value: answerModel.singleSelectionUid,
+        initialValue: answerModel.singleSelectionUid,
         onTap: () {
           focusNode?.requestFocus();
         },
@@ -361,22 +343,37 @@ class _CodingChoices extends AnswerInputControl<CodingAnswerModel> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext _, BoxConstraints constraints) {
-        return answerModel.isHorizontal &&
-                constraints.maxWidth >
-                    QuestionnaireTheme.of(context).horizontalCodingBreakpoint
-            ? _HorizontalCodingChoices(
-                answerModel,
-                _choices,
-                focusNode: focusNode,
-              )
-            : _VerticalCodingChoices(
-                answerModel,
-                _choices,
-                focusNode: focusNode,
-              );
+    return RadioGroup<String?>(
+      groupValue: answerModel.singleSelectionUid,
+      onChanged: (value) {
+        if (!answerModel.isControlEnabled) {
+          return;
+        }
+        if (value != null) {
+          Focus.of(context).requestFocus();
+        }
+        answerModel.value = OptionsOrString.fromSelectionsAndStrings(
+          answerModel.selectOption(value),
+          answerModel.value?.openStrings,
+        );
       },
+      child: LayoutBuilder(
+        builder: (BuildContext _, BoxConstraints constraints) {
+          return answerModel.isHorizontal &&
+                  constraints.maxWidth >
+                      QuestionnaireTheme.of(context).horizontalCodingBreakpoint
+              ? _HorizontalCodingChoices(
+                  answerModel,
+                  _choices,
+                  focusNode: focusNode,
+                )
+              : _VerticalCodingChoices(
+                  answerModel,
+                  _choices,
+                  focusNode: focusNode,
+                );
+        },
+      ),
     );
   }
 
