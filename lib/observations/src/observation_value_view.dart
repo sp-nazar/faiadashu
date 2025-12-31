@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:fhir/r4.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -36,6 +34,8 @@ class ObservationValueView extends StatelessWidget {
       (locale ?? Localizations.localeOf(context)).toString(),
     );
 
+    final component = _observation.component;
+
     if (_observation.valueQuantity != null) {
       final valueString =
           decimalFormat.format(_observation.valueQuantity!.value);
@@ -46,14 +46,12 @@ class ObservationValueView extends StatelessWidget {
         '$valueString $unitString',
         style: valueStyle,
       );
-    } else if (_observation.component != null &&
-        _observation.component!.isNotEmpty) {
+    } else if (component != null && component.isNotEmpty) {
       final componentText = StringBuffer();
       String? currentUnit;
-      final componentIterator =
-          HasNextIterator(_observation.component!.iterator);
+      final componentIterator = component.iterator;
       do {
-        final ObservationComponent component = componentIterator.next();
+        final ObservationComponent component = componentIterator.current;
         final unitString =
             ' ${component.valueQuantity?.unit ?? unknownUnitText}';
         // Avoid duplicate output of same unit:
@@ -71,7 +69,7 @@ class ObservationValueView extends StatelessWidget {
         } else {
           componentText.write('$componentSeparator$valueString');
         }
-      } while (componentIterator.hasNext);
+      } while (componentIterator.moveNext());
       componentText.write(currentUnit);
       valueWidget = Text(
         componentText.toString(),
