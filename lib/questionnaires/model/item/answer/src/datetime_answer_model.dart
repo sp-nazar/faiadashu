@@ -5,9 +5,9 @@ import 'package:fhir/r4.dart'
     show
         FhirDate,
         FhirDateTime,
+        FhirTime,
         QuestionnaireResponseAnswer,
-        QuestionnaireResponseItem,
-        FhirTime;
+        QuestionnaireResponseItem;
 
 class DateTimeAnswerModel extends AnswerModel<FhirDateTime, FhirDateTime> {
   DateTimeAnswerModel(super.responseModel);
