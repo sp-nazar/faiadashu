@@ -224,7 +224,7 @@ class _JsonViewerListNodeState extends _JsonNodeState<_JsonViewerListNode> {
             style: (count > 0)
                 ? TextStyle(
                     color: themeData.textTheme.bodyLarge?.color
-                        ?.withOpacity(variant600Opacity),
+                        ?.withValues(alpha: variant600Opacity),
                   )
                 : TextStyle(color: themeData.colorScheme.error),
           ),
@@ -291,7 +291,7 @@ class _JsonViewerGenericNode extends StatelessWidget {
             nodeName,
             style: TextStyle(
               color: themeData.textTheme.bodyLarge?.color
-                  ?.withOpacity(variant600Opacity),
+                  ?.withValues(alpha: variant600Opacity),
             ),
           ),
           const Text(' : '),
