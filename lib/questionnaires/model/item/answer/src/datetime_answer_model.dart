@@ -25,13 +25,14 @@ class DateTimeAnswerModel extends AnswerModel<FhirDateTime, FhirDateTime> {
   ) {
     final itemType = qi.type;
 
-    if (value?.value == null) {
+    final value = this.value;
+    if (value == null) {
       return null;
     }
 
     if (itemType.value == 'date') {
       return QuestionnaireResponseAnswer(
-        valueDate: FhirDate(value!.value),
+        valueDate: FhirDate(value.value),
         item: items,
       );
     } else if (itemType.value == 'datetime') {
@@ -42,7 +43,7 @@ class DateTimeAnswerModel extends AnswerModel<FhirDateTime, FhirDateTime> {
     } else if (itemType.value == 'time') {
       return QuestionnaireResponseAnswer(
         valueTime: FhirTime(
-          value!.value!.toIso8601String().substring('yyyy-MM-ddT'.length),
+          value.value.toIso8601String().substring('yyyy-MM-ddT'.length),
         ),
         item: items,
       );
