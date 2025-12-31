@@ -21,21 +21,22 @@ extension FDashDateExtension on FhirDate {
   String format(Locale locale, {String defaultText = ''}) {
     final localeCode = locale.toString();
     final DateFormat dateFormat;
-    switch (precision) {
-      case DateTimePrecision.yyyy:
-        dateFormat = DateFormat.y(localeCode);
-        break;
-      case DateTimePrecision.yyyy_MM:
-        dateFormat = DateFormat.yM(localeCode);
-        break;
-      case DateTimePrecision.yyyy_MM_dd:
-        dateFormat = DateFormat.yMd(localeCode);
-        break;
-      default:
-        return defaultText;
-    }
+    dateFormat = DateFormat.yMd(localeCode);
+    // switch (precision) {
+    //   case DateTimePrecision.yyyy:
+    //     dateFormat = DateFormat.y(localeCode);
+    //     break;
+    //   case DateTimePrecision.yyyy_MM:
+    //     dateFormat = DateFormat.yM(localeCode);
+    //     break;
+    //   case DateTimePrecision.yyyy_MM_dd:
+    //     dateFormat = DateFormat.yMd(localeCode);
+    //     break;
+    //   default:
+    //     return defaultText;
+    // }
 
-    return dateFormat.format(value!);
+    return dateFormat.format(value);
   }
 }
 
@@ -44,33 +45,36 @@ extension FDashDateTimeExtension on FhirDateTime {
     final localeCode = locale.toString();
     final DateFormat dateFormat;
     final japanese = locale.languageCode == 'ja';
-    switch (precision) {
-      case DateTimePrecision.yyyy_MM_dd_T_HH_mm_ss_SSSZZ:
-        dateFormat = (!japanese)
-            ? DateFormat.yMd(localeCode).add_jm()
-            : DateFormat('y年M月d日', localeCode).add_jm();
-        break;
-      case DateTimePrecision.yyyy:
-        dateFormat = (!japanese)
-            ? DateFormat.y(localeCode)
-            : DateFormat('y年', localeCode);
-        break;
-      case DateTimePrecision.yyyy_MM:
-        dateFormat = (!japanese)
-            ? DateFormat.yM(localeCode)
-            : DateFormat('y年M月', localeCode);
-        break;
-      case DateTimePrecision.yyyy_MM_dd:
-        dateFormat = (!japanese)
-            ? DateFormat.yMd(localeCode)
-            : DateFormat('y年M月d日', localeCode);
-        break;
-      case DateTimePrecision.invalid:
-      default:
-        return defaultText;
-    }
+    dateFormat = (!japanese)
+        ? DateFormat.yMd(localeCode).add_jm()
+        : DateFormat('y年M月d日', localeCode).add_jm();
+    // switch (precision) {
+    //   case DateTimePrecision.yyyy_MM_dd_T_HH_mm_ss_SSSZZ:
+    //     dateFormat = (!japanese)
+    //         ? DateFormat.yMd(localeCode).add_jm()
+    //         : DateFormat('y年M月d日', localeCode).add_jm();
+    //     break;
+    //   case DateTimePrecision.yyyy:
+    //     dateFormat = (!japanese)
+    //         ? DateFormat.y(localeCode)
+    //         : DateFormat('y年', localeCode);
+    //     break;
+    //   case DateTimePrecision.yyyy_MM:
+    //     dateFormat = (!japanese)
+    //         ? DateFormat.yM(localeCode)
+    //         : DateFormat('y年M月', localeCode);
+    //     break;
+    //   case DateTimePrecision.yyyy_MM_dd:
+    //     dateFormat = (!japanese)
+    //         ? DateFormat.yMd(localeCode)
+    //         : DateFormat('y年M月d日', localeCode);
+    //     break;
+    //   case DateTimePrecision.invalid:
+    //   default:
+    //     return defaultText;
+    // }
 
-    return dateFormat.format(value!);
+    return dateFormat.format(value);
   }
 }
 
