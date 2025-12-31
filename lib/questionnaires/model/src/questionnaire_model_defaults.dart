@@ -1,5 +1,5 @@
 import 'package:faiadashu/questionnaires/model/model.dart';
-import 'package:fhir/primitive_types/code.dart';
+import 'package:fhir_r4/fhir_r4.dart';
 
 /// The default-settings for model properties.
 ///

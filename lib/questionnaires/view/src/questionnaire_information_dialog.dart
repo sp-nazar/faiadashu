@@ -1,6 +1,6 @@
 import 'package:faiadashu/l10n/l10n.dart';
 import 'package:faiadashu/questionnaires/view/view.dart';
-import 'package:fhir/r4.dart' show Questionnaire;
+import 'package:fhir_r4/fhir_r4.dart' show Questionnaire;
 import 'package:flutter/material.dart';
 
 /// Show a dialog containing a [QuestionnaireInformationTile].
@@ -20,7 +20,7 @@ Future<void> showQuestionnaireInfo(
           child: Builder(
             builder: (context) => Text(
               MaterialLocalizations.of(context).aboutListTileTitle(
-                questionnaire.title ??
+                questionnaire.title?.valueString ??
                     FDashLocalizations.of(context).questionnaireGenericTitle,
               ),
             ),

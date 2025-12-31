@@ -6,7 +6,7 @@ import 'package:faiadashu/questionnaires/questionnaires.dart'
 import 'package:faiadashu/questionnaires/view/src/webview_none.dart'
     if (dart.library.io) 'package:faiadashu/questionnaires/view/src/webview_io.dart'
     if (dart.library.html) 'package:faiadashu/questionnaires/view/src/webview_html.dart';
-import 'package:fhir/r4/special_types/special_types.dart';
+import 'package:fhir_r4/fhir_r4.dart';
 import 'package:flutter/material.dart';
 
 /// Display a narrative

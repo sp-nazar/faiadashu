@@ -1,8 +1,7 @@
 import 'package:faiadashu/logging/logging.dart';
 import 'package:faiadashu/questionnaires/model/expression/expression.dart';
-import 'package:fhir/r4/metadata_types/metadata_types.dart';
-import 'package:fhir/r4/resource/resource.dart';
-import 'package:fhir_path/fhir_path.dart';
+import 'package:fhir_r4/fhir_r4.dart';
+import 'package:fhir_r4_path/fhir_r4_path.dart';
 import 'package:flutter/foundation.dart';
 
 class FhirPathExpressionEvaluator extends FhirExpressionEvaluator {

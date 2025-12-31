@@ -1,6 +1,6 @@
 import 'package:faiadashu/fhir_types/fhir_types.dart';
 import 'package:faiadashu/questionnaires/questionnaires.dart';
-import 'package:fhir/r4.dart' show FhirDate, FhirDateTime, FhirTime;
+import 'package:fhir_r4/fhir_r4.dart' show FhirDate, FhirDateTime, FhirTime;
 import 'package:flutter/material.dart';
 
 class DateTimeAnswerFiller extends QuestionnaireAnswerFiller {

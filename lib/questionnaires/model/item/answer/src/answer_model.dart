@@ -1,6 +1,6 @@
 import 'package:faiadashu/fhir_types/fhir_types.dart';
 import 'package:faiadashu/questionnaires/model/model.dart';
-import 'package:fhir/r4.dart';
+import 'package:fhir_r4/fhir_r4.dart';
 import 'package:flutter/material.dart';
 
 /// Models a single answer within a [QuestionItemModel].

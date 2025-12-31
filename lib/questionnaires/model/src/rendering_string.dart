@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:faiadashu/fhir_types/fhir_types.dart';
-import 'package:fhir/r4.dart';
+import 'package:fhir_r4/fhir_r4.dart';
 import 'package:flutter/foundation.dart';
 import 'package:markdown/markdown.dart';
 

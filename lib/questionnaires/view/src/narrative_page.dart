@@ -1,5 +1,5 @@
 import 'package:faiadashu/faiadashu.dart';
-import 'package:fhir/r4/special_types/special_types.dart';
+import 'package:fhir_r4/fhir_r4.dart';
 import 'package:flutter/material.dart';
 
 /// Display a narrative on a dedicated page.

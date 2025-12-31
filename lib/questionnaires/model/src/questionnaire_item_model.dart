@@ -3,7 +3,7 @@ import 'dart:core';
 import 'package:collection/collection.dart';
 import 'package:faiadashu/fhir_types/fhir_types.dart';
 import 'package:faiadashu/questionnaires/questionnaires.dart';
-import 'package:fhir/r4.dart';
+import 'package:fhir_r4/fhir_r4.dart';
 import 'package:flutter/foundation.dart';
 
 /// Models an individual item of a questionnaire.

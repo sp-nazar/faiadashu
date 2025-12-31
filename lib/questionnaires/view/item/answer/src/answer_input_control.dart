@@ -1,5 +1,5 @@
 import 'package:faiadashu/questionnaires/model/model.dart';
-import 'package:fhir/r4/resource_types/specialized/definitional_artifacts/definitional_artifacts.dart';
+import 'package:fhir_r4/fhir_r4.dart';
 import 'package:flutter/material.dart';
 
 abstract class AnswerInputControl<A extends AnswerModel>

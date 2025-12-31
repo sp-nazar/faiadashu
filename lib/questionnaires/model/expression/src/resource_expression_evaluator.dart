@@ -1,5 +1,5 @@
 import 'package:faiadashu/questionnaires/model/expression/expression.dart';
-import 'package:fhir/r4/resource/resource.dart';
+import 'package:fhir_r4/fhir_r4.dart';
 
 class ResourceExpressionEvaluator extends ExpressionEvaluator {
   final Resource? Function() resourceBuilder;

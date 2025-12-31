@@ -2,7 +2,7 @@ import 'package:faiadashu/coding/coding.dart';
 import 'package:faiadashu/l10n/l10n.dart';
 import 'package:faiadashu/logging/src/logger.dart';
 import 'package:faiadashu/questionnaires/questionnaires.dart';
-import 'package:fhir/r4.dart';
+import 'package:fhir_r4/fhir_r4.dart';
 import 'package:flutter/material.dart';
 
 /// Filler for a [QuestionnaireResponseItem].

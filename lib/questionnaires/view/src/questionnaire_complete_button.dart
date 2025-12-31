@@ -1,7 +1,7 @@
 import 'package:faiadashu/l10n/l10n.dart';
 import 'package:faiadashu/questionnaires/questionnaires.dart'
     show QuestionnaireResponseFiller;
-import 'package:fhir/primitive_types/code.dart';
+import 'package:fhir_r4/fhir_r4.dart';
 import 'package:flutter/material.dart';
 
 /// A button to complete a questionnaire.

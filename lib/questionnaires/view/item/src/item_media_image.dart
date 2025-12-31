@@ -2,7 +2,7 @@ import 'package:faiadashu/fhir_types/fhir_types.dart';
 import 'package:faiadashu/logging/logging.dart';
 import 'package:faiadashu/questionnaires/model/model.dart';
 import 'package:faiadashu/resource_provider/resource_provider.dart';
-import 'package:fhir/r4/general_types/general_types.dart';
+import 'package:fhir_r4/fhir_r4.dart';
 import 'package:flutter/material.dart';
 
 /// Image [Widget] for itemMedia extension

@@ -1,5 +1,5 @@
 import 'package:faiadashu/questionnaires/model/model.dart';
-import 'package:fhir/r4.dart';
+import 'package:fhir_r4/fhir_r4.dart';
 
 /// A pseudo-model for a questionnaire item of an unsupported type.
 class UnsupportedAnswerModel extends AnswerModel<Object, Object> {

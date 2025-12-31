@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:faiadashu/resource_provider/resource_provider.dart';
-import 'package:fhir/r4.dart';
+import 'package:fhir_r4/fhir_r4.dart';
 
 /// Provide commonly used [ValueSet]s in hard-coded form.
 ///

@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:faiadashu/logging/logging.dart';
-import 'package:fhir/r4.dart';
+import 'package:fhir_r4/fhir_r4.dart';
 import 'package:intl/intl.dart';
 
 extension FDashTimeExtension on FhirTime {
