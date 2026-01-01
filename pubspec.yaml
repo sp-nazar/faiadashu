@@ -27,10 +27,6 @@ dependencies:
   collection: ^1.17.0
   fhir_r4: ^0.4.3
   fhir_r4_path: ^0.4.3
-#  fhir:
-#    path: /Users/tilo/Projects/fhir/fhir
-#  fhir_path:
-#    path: /Users/tilo/Projects/fhir/fhir_path
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -44,9 +40,6 @@ dependencies:
   webview_flutter: ^4.9.0
   webview_flutter_platform_interface: ^2.0.0
   webview_flutter_web: ^0.2.0
-  
-dependency_overrides:
-  intl: 0.20.2
 
 dev_dependencies:
   dart_code_metrics: any
