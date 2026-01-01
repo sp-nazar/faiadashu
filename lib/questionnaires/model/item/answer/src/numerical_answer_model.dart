@@ -231,29 +231,24 @@ class NumericalAnswerModel extends AnswerModel<String, Quantity> {
   /// * Updates the unit based on a key as returned by [keyForUnitChoice]
   Quantity? copyWithUnit(String? unitChoiceKey) {
     final unitCoding = unitChoiceByKey(unitChoiceKey);
+    final localizedDisplay = unitCoding?.localizedDisplay(locale);
+    final system = unitCoding?.system;
+    final code = unitCoding?.code;
+
+    final unit = localizedDisplay != null ? FhirString(localizedDisplay) : null;
+    final unitSystem = system != null ? FhirUri(system) : null;
+    final unitCode = code != null ? FhirCode(code) : null;
 
     return (value != null)
         ? value!.copyWith(
-            unit: unitCoding?.localizedDisplay(locale) == null
-                ? null
-                : FhirString(unitCoding!.localizedDisplay(locale)!),
-            system: unitCoding?.system == null
-                ? null
-                : FhirUri(unitCoding!.system!),
-            code: unitCoding?.code == null
-                ? null
-                : FhirCode(unitCoding!.code!),
+            unit: unit,
+            system: unitSystem,
+            code: unitCode,
           )
         : Quantity(
-            unit: unitCoding?.localizedDisplay(locale) == null
-                ? null
-                : FhirString(unitCoding!.localizedDisplay(locale)!),
-            system: unitCoding?.system == null
-                ? null
-                : FhirUri(unitCoding!.system!),
-            code: unitCoding?.code == null
-                ? null
-                : FhirCode(unitCoding!.code!),
+            unit: unit,
+            system: unitSystem,
+            code: unitCode,
           );
   }
 
@@ -338,31 +333,32 @@ class NumericalAnswerModel extends AnswerModel<String, Quantity> {
 
   Quantity? _valueFromNumber(dynamic inputNumber) {
     final unitCoding = qi.computableUnit;
-
+    final localizedDisplay = unitCoding?.localizedDisplay(locale);
+    final system = unitCoding?.system;
+    final code = unitCoding?.code;
     final quantityValue = FhirDecimal(inputNumber);
+
+    final unit = localizedDisplay != null ? FhirString(localizedDisplay) : null;
+    final unitSystem = system != null ? FhirUri(system) : null;
+    final unitCode = code != null ? FhirCode(code) : null;
+    final extensions = (unitCoding != null &&
+            (qi.type.value == 'decimal' || qi.type.value == 'integer'))
+        ? [
+            FhirExtension(
+              url: FhirString(
+                'http://hl7.org/fhir/StructureDefinition/questionnaire-unit',
+              ),
+              valueCoding: unitCoding,
+            ),
+          ]
+        : null;
 
     return Quantity(
       value: quantityValue,
-      unit: unitCoding?.localizedDisplay(locale) == null
-          ? null
-          : FhirString(unitCoding!.localizedDisplay(locale)!),
-      system: unitCoding?.system == null
-          ? null
-          : FhirUri(unitCoding!.system!),
-      code: unitCoding?.code == null
-          ? null
-          : FhirCode(unitCoding!.code!),
-      extension_: (unitCoding != null &&
-              (qi.type.value == 'decimal' || qi.type.value == 'integer'))
-          ? [
-              FhirExtension(
-                url: FhirString(
-                  'http://hl7.org/fhir/StructureDefinition/questionnaire-unit',
-                ),
-                valueCoding: unitCoding,
-              ),
-            ]
-          : null,
+      unit: unit,
+      system: unitSystem,
+      code: unitCode,
+      extension_: extensions,
     );
   }
 

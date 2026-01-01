@@ -494,7 +494,7 @@ class QuestionnaireResponseModel {
     }
 
     for (final item in questionnaireResponseItems) {
-      final linkId = item.linkId?.value ?? '';
+      final linkId = item.linkId.value ?? '';
       final qim = questionnaireModel.fromLinkId(linkId);
       final rim = responseItemModels.firstWhereOrNull(
         (rim) => rim.questionnaireItemModel.linkId == linkId,
@@ -610,7 +610,7 @@ class QuestionnaireResponseModel {
       questionnaireResponseItems,
     );
 
-    responseStatus = questionnaireResponse.status ?? FhirCode('in-progress');
+    responseStatus = questionnaireResponse.status;
   }
 
   Future<void> _updateCalculations() async {

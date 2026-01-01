@@ -14,7 +14,7 @@ class QuestionnaireResponseAggregator
 
   QuestionnaireResponseAggregator()
       : super(
-          QuestionnaireResponse(
+          const QuestionnaireResponse(
             status: QuestionnaireResponseStatus.inProgress,
           ),
           autoAggregate: false,
@@ -71,9 +71,8 @@ class QuestionnaireResponseAggregator
     }
 
     final responseItem = QuestionnaireResponseItem(
-      linkId: (itemModel.questionnaireItemModel.linkId ?? '')
-          .toFhirString,
-      text: itemModel.questionnaireItemModel.text?.plainText?.toFhirString,
+      linkId: itemModel.questionnaireItemModel.linkId.toFhirString,
+      text: itemModel.questionnaireItemModel.text?.plainText.toFhirString,
       // TODO: Include textElement
       extension_: (dataAbsentReason != null)
           ? [
@@ -106,9 +105,8 @@ class QuestionnaireResponseAggregator
 
     if (nestedItems != null) {
       final responseItem = QuestionnaireResponseItem(
-        linkId: (itemModel.questionnaireItemModel.linkId ?? '')
-            .toFhirString,
-        text: itemModel.questionnaireItemModel.text?.plainText?.toFhirString,
+        linkId: itemModel.questionnaireItemModel.linkId.toFhirString,
+        text: itemModel.questionnaireItemModel.text?.plainText.toFhirString,
         // TODO: include textElement
         item: nestedItems,
       );

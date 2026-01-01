@@ -1,7 +1,6 @@
 import 'dart:core';
 
 import 'package:collection/collection.dart';
-import 'package:faiadashu/fhir_types/fhir_types.dart';
 import 'package:faiadashu/questionnaires/questionnaires.dart';
 import 'package:fhir_r4/fhir_r4.dart';
 import 'package:flutter/foundation.dart';
@@ -102,27 +101,29 @@ class QuestionnaireItemModel with Diagnosticable {
   bool get hasConstraint => constraintExpression != null;
 
   String? get constraintExpression {
-    return questionnaireItem.extension_
-        ?.firstWhereOrNull(
-          (ext) =>
-              ext.url?.value.toString() ==
-              'http://hl7.org/fhir/StructureDefinition/questionnaire-constraint',
-        )
-        ?.extension_
-        ?.firstWhereOrNull((ext) => ext.url?.value.toString() == 'expression')
-        ?.valueString?.value;
+    final constraintExtension = questionnaireItem.extension_?.firstWhereOrNull(
+      (ext) =>
+          ext.url.value.toString() ==
+          'http://hl7.org/fhir/StructureDefinition/questionnaire-constraint',
+    );
+
+    return constraintExtension?.extension_
+        ?.firstWhereOrNull((ext) => ext.url.value.toString() == 'expression')
+        ?.valueString
+        ?.value;
   }
 
   String? get constraintHuman {
-    return questionnaireItem.extension_
-        ?.firstWhereOrNull(
-          (ext) =>
-              ext.url?.value.toString() ==
-              'http://hl7.org/fhir/StructureDefinition/questionnaire-constraint',
-        )
-        ?.extension_
-        ?.firstWhereOrNull((ext) => ext.url?.value.toString() == 'human')
-        ?.valueString?.value;
+    final constraintExtension = questionnaireItem.extension_?.firstWhereOrNull(
+      (ext) =>
+          ext.url.value.toString() ==
+          'http://hl7.org/fhir/StructureDefinition/questionnaire-constraint',
+    );
+
+    return constraintExtension?.extension_
+        ?.firstWhereOrNull((ext) => ext.url.value.toString() == 'human')
+        ?.valueString
+        ?.value;
   }
 
   /// Is this item's value calculated?
@@ -134,20 +135,21 @@ class QuestionnaireItemModel with Diagnosticable {
   bool get isTotalScore {
     // Checking for read-only is relevant,
     // as there are also input fields (e.g. pain score) with unit {score}.
+    final hasScoreUnit = questionnaireItem.readOnly == FhirBoolean(true) &&
+        questionnaireItem.computableUnit?.display?.value == '{score}';
+
+    final calculatedExpressionName = questionnaireItem.extension_
+        ?.firstWhereOrNull(
+          (ext) =>
+              ext.url.value.toString() == calculatedExpressionExtensionUrl,
+        )
+        ?.valueExpression
+        ?.name
+        ?.toString();
+
     return (questionnaireItem.type == FhirCode('quantity') ||
             questionnaireItem.type == FhirCode('decimal')) &&
-        ((questionnaireItem.readOnly == FhirBoolean(true) &&
-                questionnaireItem.computableUnit?.display == '{score}') ||
-            questionnaireItem.extension_
-                    ?.firstWhereOrNull(
-                      (ext) =>
-                          ext.url?.value.toString() ==
-                          calculatedExpressionExtensionUrl,
-                    )
-                    ?.valueExpression
-                    ?.name
-                    .toString() ==
-                'score');
+        (hasScoreUnit || calculatedExpressionName == 'score');
   }
 
   static const String calculatedExpressionExtensionUrl =
@@ -157,7 +159,7 @@ class QuestionnaireItemModel with Diagnosticable {
     return questionnaireItem.extension_
         ?.firstWhereOrNull(
           (ext) =>
-              ext.url?.value.toString() == calculatedExpressionExtensionUrl,
+              ext.url.value.toString() == calculatedExpressionExtensionUrl,
         )
         ?.valueExpression;
   }
@@ -168,7 +170,7 @@ class QuestionnaireItemModel with Diagnosticable {
           return {
             calculatedExpressionExtensionUrl,
             'http://hl7.org/fhir/StructureDefinition/cqf-expression',
-          }.contains(ext.url?.value.toString());
+          }.contains(ext.url.value.toString());
         }) !=
         null) {
       return true;

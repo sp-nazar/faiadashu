@@ -47,7 +47,7 @@ class _QuestionnaireCompleteButtonState
           qrm.responseStatus = newResponseStatus;
         });
 
-        if (newResponseStatus == 'completed') {
+        if (newResponseStatus.valueString == 'completed') {
           widget.onCompleted?.call();
         }
       },

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
-import 'package:faiadashu/fhir_types/fhir_types.dart';
 import 'package:faiadashu/logging/logging.dart';
 import 'package:faiadashu/questionnaires/questionnaires.dart';
 import 'package:fhir_r4/fhir_r4.dart';
@@ -178,7 +177,7 @@ abstract class FillerItemModel extends ResponseNode {
   void activateEnableWhen() {
     if (!_enableWhenActivated) {
       questionnaireItemModel.forEnableWhens((qew) {
-        fromLinkId(qew.question?.value ?? '')
+        fromLinkId(qew.question.value ?? '')
             .addListener(
               () => unawaited(
                 questionnaireResponseModel.updateEnabledItems(),
@@ -281,8 +280,8 @@ abstract class FillerItemModel extends ResponseNode {
     final enableWhenTrigger = _EnableWhenTrigger();
 
     questionnaireItemModel.forEnableWhens((qew) {
-      final questionLinkId = qew.question?.value ?? '';
-      if (questionLinkId == null) {
+      final questionLinkId = qew.question.value ?? '';
+      if (questionLinkId.isEmpty) {
         throw QuestionnaireFormatException(
           'enableWhen with unspecified linkId.',
           qew,
@@ -290,7 +289,7 @@ abstract class FillerItemModel extends ResponseNode {
       }
 
       enableWhenTrigger.incrementAllConditionCount();
-      switch (qew.operator_?.value) {
+      switch (qew.operator_.value) {
         case 'exists':
           _evaluateExistsOperator(qew, enableWhenTrigger);
           break;
@@ -372,7 +371,7 @@ abstract class FillerItemModel extends ResponseNode {
           );
         }
 
-        switch (qew.operator_?.value) {
+        switch (qew.operator_.value) {
           case 'gt':
             if (answerValue > comparisonValue) {
               enableWhenTrigger.trigger();
@@ -395,7 +394,7 @@ abstract class FillerItemModel extends ResponseNode {
             break;
           default:
             _fimLogger.warn(
-              'Unexpected operator: ${qew.operator_} at $questionLinkId.',
+              'Unexpected operator: ${qew.operator_.value} at $questionLinkId.',
             );
             enableWhenTrigger.trigger();
         }
@@ -436,7 +435,7 @@ abstract class FillerItemModel extends ResponseNode {
 
       if (firstAnswer == null) {
         // null equals nothing
-        if (qew.operator_?.value == 'ne') {
+        if (qew.operator_.value == 'ne') {
           enableWhenTrigger.trigger();
         }
       } else if (firstAnswer is CodingAnswerModel) {
@@ -444,14 +443,14 @@ abstract class FillerItemModel extends ResponseNode {
           _fimLogger.debug(
             'enableWhen: ${firstAnswer.value} == ${qew.answerCoding}',
           );
-          if (qew.operator_?.value == 'eq') {
+          if (qew.operator_.value == 'eq') {
             enableWhenTrigger.trigger();
           }
         } else {
           _fimLogger.debug(
             'enableWhen: ${firstAnswer.value} != ${qew.answerCoding}',
           );
-          if (qew.operator_?.value == 'ne') {
+          if (qew.operator_.value == 'ne') {
             enableWhenTrigger.trigger();
           }
         }
@@ -475,7 +474,7 @@ abstract class FillerItemModel extends ResponseNode {
     QuestionnaireEnableWhen qew,
     _EnableWhenTrigger enableWhenTrigger,
   ) {
-    final rim = fromLinkId(qew.question!.value ?? '');
+    final rim = fromLinkId(qew.question.value ?? '');
     final shouldExist = (qew.answerBoolean?.value ?? true) == true;
 
     // If enableWhen logic depends on an item that is disabled, the logic should
@@ -656,7 +655,7 @@ class _EnableWhenTrigger {
 }
 
 class _QuestionnaireItemExpressionEvaluator extends ExpressionEvaluator {
-  late final QuestionnaireItem questionnaireItem;
+  final QuestionnaireItem questionnaireItem;
 
   @override
   Future<dynamic> evaluate({int? generation}) async {
@@ -665,9 +664,6 @@ class _QuestionnaireItemExpressionEvaluator extends ExpressionEvaluator {
     return [qi];
   }
 
-  _QuestionnaireItemExpressionEvaluator(
-    QuestionnaireItem questionnaireItem,
-  ) : super('qitem', []) {
-    this.questionnaireItem = questionnaireItem;
-  }
+  _QuestionnaireItemExpressionEvaluator(this.questionnaireItem)
+      : super('qitem', []);
 }

@@ -1,6 +1,6 @@
 import 'package:faiadashu/questionnaires/model/expression/expression.dart';
+import 'package:faiadashu/questionnaires/model/expression/src/fhir_r4_path_compat.dart';
 import 'package:fhir_r4/fhir_r4.dart';
-import 'fhir_r4_path_compat.dart';
 
 abstract class FhirExpressionEvaluator extends ExpressionEvaluator {
   FhirExpressionEvaluator(
@@ -22,7 +22,7 @@ abstract class FhirExpressionEvaluator extends ExpressionEvaluator {
     String? debugLabel,
   }) {
     final language = ArgumentError.checkNotNull(fhirExpression.language);
-    if (language == FhirExpressionLanguage.text_fhirpath) {
+    if (language == FhirExpressionLanguage.textFhirpath.value) {
       return FhirPathExpressionEvaluator(
         resourceBuilder,
         fhirExpression,
@@ -31,14 +31,14 @@ abstract class FhirExpressionEvaluator extends ExpressionEvaluator {
         contextBuilder: contextBuilder,
         debugLabel: debugLabel,
       );
-    } else if (language == FhirExpressionLanguage.application_x_fhir_query) {
+    } else if (language == FhirExpressionLanguage.applicationXFhirQuery.value) {
       return FhirQueryExpressionEvaluator(
         fhirExpression,
         upstreamExpressions,
         debugLabel: debugLabel,
       );
-    } else if (language == FhirExpressionLanguage.text_cql ||
-               language == FhirExpressionLanguage.unknown) {
+    } else if (language == FhirExpressionLanguage.textCql.value ||
+               language == FhirExpressionLanguage.unknown.value) {
       throw UnsupportedError(
         'Expressions of type ${fhirExpression.language} are unsupported.',
       );
