@@ -2,6 +2,9 @@
 [![pub package](https://img.shields.io/pub/v/faiadashu.svg?logo=flutter)](https://pub.dartlang.org/packages/faiadashu)
 # *Faiadashu™ FHIRDash* — Widgets for Digital Health
 
+## Migration from fhir_0.12.0 branch
+See [guide](./doc/migration_from_fhir_0.12.0.md)
+
 ## Mission
 Build beautiful healthcare apps fast — use the Flutter™ SDK and follow the HL7® FHIR® standard.
 
@@ -13,7 +16,7 @@ Build beautiful healthcare apps fast — use the Flutter™ SDK and follow the H
 * Formatted and localized output of dates / times
 * Localized output of clinical codings
 * Development tree view to introspect clinical and administrative data structures
-  
+
 ## Gallery
 ### Filler for FHIR Questionnaires
 ![Swift walk-through](https://user-images.githubusercontent.com/16414047/113286611-bdd93d00-92ec-11eb-9c7d-fd72dd0b99fe.gif)
