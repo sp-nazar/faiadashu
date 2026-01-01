@@ -45,7 +45,7 @@ class _BooleanInputControl extends AnswerInputControl<BooleanAnswerModel> {
         Checkbox(
           focusNode: focusNode,
           value: (answerModel.isTriState)
-              ? answerModel.value?.value
+              ? (answerModel.value?.value as bool?)
               : (answerModel.value?.value != null),
           activeColor: (answerModel.displayErrorText != null)
               ? Theme.of(context).colorScheme.error

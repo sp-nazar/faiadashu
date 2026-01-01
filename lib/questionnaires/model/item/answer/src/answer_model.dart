@@ -61,7 +61,7 @@ abstract class AnswerModel<I, V> extends ResponseNode {
   String? get entryFormat {
     return qi.extension_
         ?.extensionOrNull('http://hl7.org/fhir/StructureDefinition/entryFormat')
-        ?.valueString;
+        ?.valueString?.value;
   }
 
   /// Construct a new, unpopulated answer model.

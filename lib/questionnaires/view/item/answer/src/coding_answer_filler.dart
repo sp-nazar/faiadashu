@@ -62,7 +62,8 @@ class _CodingInputControl extends AnswerInputControl<CodingAnswerModel> {
 
   Widget _buildCodingControl(BuildContext context) {
     // Only checkbox choices currently support repeating answers.
-    if (qi.repeats?.value ?? false) {
+    final repeats = qi.repeats?.value ?? false;
+    if (repeats) {
       return _createChoiceAnswers();
     }
 
@@ -379,7 +380,7 @@ class _CodingChoices extends AnswerInputControl<CodingAnswerModel> {
 
   List<Widget> _createChoices() {
     final isCheckBox = qi.isItemControl('check-box');
-    final isMultipleChoice = qi.repeats?.value ?? isCheckBox;
+    final isMultipleChoice = (qi.repeats?.value ?? false) || isCheckBox;
     final isShowingNull = answerModel.hasNullOption;
 
     final choices = <Widget>[];

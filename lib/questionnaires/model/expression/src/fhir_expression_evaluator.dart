@@ -21,27 +21,30 @@ abstract class FhirExpressionEvaluator extends ExpressionEvaluator {
     Map<String, dynamic>? Function()? jsonBuilder,
     String? debugLabel,
   }) {
-    switch (ArgumentError.checkNotNull(fhirExpression.language)) {
-      case FhirExpressionLanguage.text_fhirpath:
-        return FhirPathExpressionEvaluator(
-          resourceBuilder,
-          fhirExpression,
-          upstreamExpressions,
-          jsonBuilder: jsonBuilder,
-          debugLabel: debugLabel,
-        );
-      case FhirExpressionLanguage.application_x_fhir_query:
-        return FhirQueryExpressionEvaluator(
-          fhirExpression,
-          upstreamExpressions,
-          debugLabel: debugLabel,
-        );
-      case FhirExpressionLanguage.text_cql:
-      case FhirExpressionLanguage.unknown:
-      default:
-        throw UnsupportedError(
-          'Expressions of type ${fhirExpression.language} are unsupported.',
-        );
+    final language = ArgumentError.checkNotNull(fhirExpression.language);
+    if (language == FhirExpressionLanguage.text_fhirpath) {
+      return FhirPathExpressionEvaluator(
+        resourceBuilder,
+        fhirExpression,
+        upstreamExpressions,
+        jsonBuilder: jsonBuilder,
+        debugLabel: debugLabel,
+      );
+    } else if (language == FhirExpressionLanguage.application_x_fhir_query) {
+      return FhirQueryExpressionEvaluator(
+        fhirExpression,
+        upstreamExpressions,
+        debugLabel: debugLabel,
+      );
+    } else if (language == FhirExpressionLanguage.text_cql ||
+               language == FhirExpressionLanguage.unknown) {
+      throw UnsupportedError(
+        'Expressions of type ${fhirExpression.language} are unsupported.',
+      );
+    } else {
+      throw UnsupportedError(
+        'Expressions of type ${fhirExpression.language} are unsupported.',
+      );
     }
   }
 }

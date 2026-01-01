@@ -84,10 +84,10 @@ class NumericalAnswerModel extends AnswerModel<String, Quantity> {
     final maxValueExtension = questionnaireItemModel
         .questionnaireItem.extension_
         ?.extensionOrNull('http://hl7.org/fhir/StructureDefinition/maxValue');
-    _minValue = minValueExtension?.valueDecimal?.value ??
+    _minValue = minValueExtension?.valueDecimal?.value?.toDouble() ??
         minValueExtension?.valueInteger?.value?.toDouble() ??
         0.0;
-    _maxValue = maxValueExtension?.valueDecimal?.value ??
+    _maxValue = maxValueExtension?.valueDecimal?.value?.toDouble() ??
         maxValueExtension?.valueInteger?.value?.toDouble() ??
         (_isSliding ? modelDefaults.sliderMaxValue : double.maxFinite);
 
@@ -118,7 +118,8 @@ class NumericalAnswerModel extends AnswerModel<String, Quantity> {
                   'http://hl7.org/fhir/StructureDefinition/maxDecimalPlaces',
                 )
                 ?.valueInteger
-                ?.value ??
+                ?.value
+                ?.toInt() ??
             modelDefaults.maxDecimal;
         break;
       default:
@@ -230,14 +231,26 @@ class NumericalAnswerModel extends AnswerModel<String, Quantity> {
 
     return (value != null)
         ? value!.copyWith(
-            unit: unitCoding?.localizedDisplay(locale),
-            system: unitCoding?.system,
-            code: unitCoding?.code,
+            unit: unitCoding?.localizedDisplay(locale) == null
+                ? null
+                : FhirString(unitCoding!.localizedDisplay(locale)!),
+            system: unitCoding?.system == null
+                ? null
+                : FhirUri(unitCoding!.system!),
+            code: unitCoding?.code == null
+                ? null
+                : FhirCode(unitCoding!.code!),
           )
         : Quantity(
-            unit: unitCoding?.localizedDisplay(locale),
-            system: unitCoding?.system,
-            code: unitCoding?.code,
+            unit: unitCoding?.localizedDisplay(locale) == null
+                ? null
+                : FhirString(unitCoding!.localizedDisplay(locale)!),
+            system: unitCoding?.system == null
+                ? null
+                : FhirUri(unitCoding!.system!),
+            code: unitCoding?.code == null
+                ? null
+                : FhirCode(unitCoding!.code!),
           );
   }
 
@@ -326,14 +339,20 @@ class NumericalAnswerModel extends AnswerModel<String, Quantity> {
 
     return Quantity(
       value: quantityValue,
-      unit: unitCoding?.localizedDisplay(locale),
-      system: unitCoding?.system,
-      code: unitCoding?.code,
+      unit: unitCoding?.localizedDisplay(locale) == null
+          ? null
+          : FhirString(unitCoding!.localizedDisplay(locale)!),
+      system: unitCoding?.system == null
+          ? null
+          : FhirUri(unitCoding!.system!),
+      code: unitCoding?.code == null
+          ? null
+          : FhirCode(unitCoding!.code!),
       extension_: (unitCoding != null &&
               (qi.type.value == 'decimal' || qi.type.value == 'integer'))
           ? [
               FhirExtension(
-                url: FhirUri(
+                url: FhirString(
                   'http://hl7.org/fhir/StructureDefinition/questionnaire-unit',
                 ),
                 valueCoding: unitCoding,

@@ -427,7 +427,7 @@ class QuestionItemModel extends ResponseItemModel {
       firstAnswerModel.populateFromExpression(evaluationResult);
     } catch (ex) {
       errorText =
-          (ex is FhirPathEvaluationException) ? ex.message : ex.toString();
+          (ex is Exception) ? ex.toString() : ex.toString();
       _qimLogger.warn('Calculation problem: $_calculatedExpression', error: ex);
       notifyListeners(); // This could be added to a setter for errorText, but might have side-effects.
     }

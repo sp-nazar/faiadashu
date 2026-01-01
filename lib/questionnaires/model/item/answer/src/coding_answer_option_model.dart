@@ -164,8 +164,8 @@ class CodingAnswerOptionModel {
           '$qao specifies neither valueCode nor valueString.',
         );
       }
-      final plainText = valueString;
-      final xhtmlExtensions = qao.valueStringElement?.extension_;
+      final plainText = valueString.value;
+      final xhtmlExtensions = qao.valueString?.extension_;
       forDisplay = plainText;
       optionText = RenderingString.fromText(
         plainText,
@@ -201,11 +201,11 @@ class CodingAnswerOptionModel {
     if (ordinalValue != null) {
       responseOrdinalExtension = <FhirExtension>[
         FhirExtension(
-          url: FhirUri('http://hl7.org/fhir/StructureDefinition/ordinalValue'),
+          url: FhirString('http://hl7.org/fhir/StructureDefinition/ordinalValue'),
           valueDecimal: ordinalValue,
         ),
         FhirExtension(
-          url: FhirUri(
+          url: FhirString(
             'http://hl7.org/fhir/StructureDefinition/iso21090-CO-value',
           ),
           valueDecimal: ordinalValue,
@@ -229,7 +229,7 @@ class CodingAnswerOptionModel {
             userSelected: FhirBoolean(true),
           )
         : Coding(
-            display: forDisplay,
+            display: FhirString(forDisplay),
             userSelected: FhirBoolean(true),
           );
   }
@@ -282,7 +282,7 @@ class CodingAnswerOptionModel {
     final forDisplayPath =
         forDisplayColumn.extension_?.extensionOrNull('path')?.valueString;
 
-    return forDisplayPath ?? displayForDisplayPath;
+    return forDisplayPath?.value ?? displayForDisplayPath;
   }
 
   static String _createForCodingPath(
@@ -321,7 +321,7 @@ class CodingAnswerOptionModel {
     }
 
     final outputs = choiceColumns.map<String>((ext) {
-      final path = ext.extension_?.extensionOrNull('path')?.valueString;
+      final path = ext.extension_?.extensionOrNull('path')?.valueString?.value;
       if (path != null) {
         return _createForCodingPath(
           path,

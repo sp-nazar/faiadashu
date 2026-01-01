@@ -18,7 +18,7 @@ class QuestionnaireInformationTile extends StatelessWidget {
       children: [
         Xhtml.fromPlainTextAndExtensions(
           context,
-          questionnaire.title ??
+          questionnaire.title?.value ??
               FDashLocalizations.of(context).questionnaireUnknownTitle,
           extensions: questionnaire.titleElement?.extension_,
           defaultTextStyle: defaultTextStyle,
@@ -26,7 +26,7 @@ class QuestionnaireInformationTile extends StatelessWidget {
         const Divider(),
         Xhtml.fromPlainTextAndExtensions(
           context,
-          questionnaire.publisher ??
+          questionnaire.publisher?.value ??
               FDashLocalizations.of(context).questionnaireUnknownPublisher,
           extensions: questionnaire.publisherElement?.extension_,
           defaultTextStyle: defaultTextStyle,

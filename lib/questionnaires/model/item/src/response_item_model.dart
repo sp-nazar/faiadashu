@@ -24,7 +24,7 @@ abstract class ResponseItemModel extends FillerItemModel {
                 .createQuestionnaireResponseForFhirPath(),
             FhirExpression(
               expression: constraintExpression,
-              language: FhirExpressionLanguage.text_fhirpath,
+              language: ExpressionLanguage.textFhirpath,
             ),
             [
               ...itemWithPredecessorsExpressionEvaluators,

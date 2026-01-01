@@ -52,7 +52,7 @@ class TotalScoreAggregator extends Aggregator<FhirDecimal> {
         questionnaireResponseModel.orderedQuestionItemModels().fold<double>(
               0.0,
               (previousValue, element) =>
-                  previousValue + (element.ordinalValue?.value ?? 0.0),
+                  previousValue + ((element.ordinalValue as num?) ?? 0.0),
             );
 
     _logger.debug('sum: $sum');

@@ -71,8 +71,7 @@ class QuestionnaireResponseAggregator
     }
 
     final responseItem = QuestionnaireResponseItem(
-      linkId: itemModel.questionnaireItemModel.linkId?.toFhirString ??
-          FhirString(''),
+      linkId: itemModel.questionnaireItemModel.linkId ?? FhirString(''),
       text: itemModel.questionnaireItemModel.text?.plainText?.toFhirString,
       // TODO: Include textElement
       extension_: (dataAbsentReason != null)
@@ -107,8 +106,7 @@ class QuestionnaireResponseAggregator
 
     if (nestedItems != null) {
       final responseItem = QuestionnaireResponseItem(
-        linkId: itemModel.questionnaireItemModel.linkId?.toFhirString ??
-            FhirString(''),
+        linkId: itemModel.questionnaireItemModel.linkId ?? FhirString(''),
         text: itemModel.questionnaireItemModel.text?.plainText?.toFhirString,
         // TODO: include textElement
         item: nestedItems,
