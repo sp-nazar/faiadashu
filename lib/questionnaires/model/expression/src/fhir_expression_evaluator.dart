@@ -1,5 +1,6 @@
 import 'package:faiadashu/questionnaires/model/expression/expression.dart';
 import 'package:fhir_r4/fhir_r4.dart';
+import 'fhir_r4_path_compat.dart';
 
 abstract class FhirExpressionEvaluator extends ExpressionEvaluator {
   FhirExpressionEvaluator(

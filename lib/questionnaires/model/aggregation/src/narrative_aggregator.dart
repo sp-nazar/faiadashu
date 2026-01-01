@@ -1,4 +1,5 @@
 import 'package:faiadashu/coding/coding.dart';
+import 'package:faiadashu/fhir_types/fhir_types.dart';
 import 'package:faiadashu/l10n/l10n.dart';
 import 'package:faiadashu/logging/logging.dart';
 import 'package:faiadashu/questionnaires/questionnaires.dart';
@@ -14,8 +15,8 @@ class NarrativeAggregator extends Aggregator<Narrative> {
   Narrative? _narrative;
 
   static final emptyNarrative = Narrative(
-    div: '<div xmlns="http://www.w3.org/1999/xhtml"></div>',
-    status: NarrativeStatus.empty,
+    div: FhirXhtml('<div xmlns="http://www.w3.org/1999/xhtml"></div>'),
+    status: NarrativeStatus.empty_,
   );
 
   NarrativeAggregator()
@@ -134,11 +135,10 @@ class NarrativeAggregator extends Aggregator<Narrative> {
     } else {
       final filledAnswers = itemModel.answeredAnswerModels;
 
+      final repeats =
+          itemModel.questionnaireItemModel.questionnaireItem.repeats?.value;
       final repeatPrefix =
-          itemModel.questionnaireItemModel.questionnaireItem.repeats?.value ??
-                  false
-              ? '• '
-              : '';
+          (repeats is bool && repeats) ? '• ' : '';
       for (final answerModel in filledAnswers) {
         if (answerModel is NumericalAnswerModel) {
           if (itemModel.questionnaireItemModel.isTotalScore) {
@@ -190,8 +190,8 @@ class NarrativeAggregator extends Aggregator<Narrative> {
     div.write('</div>');
 
     return Narrative(
-      div: div.toString(),
-      status: generated ? NarrativeStatus.generated : NarrativeStatus.empty,
+      div: FhirXhtml(div.toString()),
+      status: generated ? NarrativeStatus.generated : NarrativeStatus.empty_,
     );
   }
 
