@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:faiadashu/fhir_types/fhir_types.dart';
 import 'package:faiadashu/l10n/l10n.dart';
 import 'package:faiadashu/questionnaires/questionnaires.dart';
 import 'package:flutter/material.dart';

@@ -1,4 +1,3 @@
-import 'package:faiadashu/fhir_types/fhir_types.dart';
 import 'package:faiadashu/l10n/l10n.dart';
 import 'package:faiadashu/logging/logging.dart';
 import 'package:faiadashu/questionnaires/questionnaires.dart';
@@ -79,7 +78,7 @@ class _TotalScoreItemState extends State<TotalScoreItem> {
     final matchExtension =
         widget.questionnaireItemModel.questionnaireItem.extension_?.firstWhere(
       (ext) {
-        return (ext.url?.value.toString() ==
+        return (ext.url.value.toString() ==
                 'http://ehealth.sundhed.dk/fhir/StructureDefinition/ehealth-questionnaire-feedback') &&
             (ext.extension_!.extensionOrNull('min')!.valueInteger!.value! <=
                 score) &&
@@ -89,9 +88,14 @@ class _TotalScoreItemState extends State<TotalScoreItem> {
       orElse: () => _nullExtension,
     );
 
-    return (matchExtension == _nullExtension)
-        ? null
-        : matchExtension!.extension_!.extensionOrNull('value')!.valueString?.value;
+    if (matchExtension == null || matchExtension == _nullExtension) {
+      return null;
+    }
+
+    return matchExtension.extension_
+        ?.extensionOrNull('value')
+        ?.valueString
+        ?.value;
   }
 
   @override

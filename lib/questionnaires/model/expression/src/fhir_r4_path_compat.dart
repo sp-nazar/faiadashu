@@ -24,11 +24,13 @@ Future<List<FhirBase>> executeFhirPath({
     );
 
 /// Legacy names for expression languages.
-class FhirExpressionLanguage {
-  static ExpressionLanguage get text_fhirpath =>
-      ExpressionLanguage.textFhirpath;
-  static ExpressionLanguage get application_x_fhir_query =>
-      ExpressionLanguage.applicationXFhirQuery;
-  static ExpressionLanguage get text_cql => ExpressionLanguage.textCql;
-  static ExpressionLanguage get unknown => ExpressionLanguage.textCql;
+enum FhirExpressionLanguage {
+  textFhirpath(ExpressionLanguage.textFhirpath),
+  applicationXFhirQuery(ExpressionLanguage.applicationXFhirQuery),
+  textCql(ExpressionLanguage.textCql),
+  unknown(ExpressionLanguage.textCql);
+
+  const FhirExpressionLanguage(this.value);
+
+  final ExpressionLanguage value;
 }

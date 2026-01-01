@@ -1,12 +1,11 @@
 import 'dart:async';
 
-import 'package:faiadashu/logging/logging.dart';
 import 'package:faiadashu/fhir_types/fhir_types.dart';
+import 'package:faiadashu/logging/logging.dart';
 import 'package:faiadashu/questionnaires/model/expression/expression.dart';
+import 'package:faiadashu/questionnaires/model/expression/src/fhir_r4_path_compat.dart';
 import 'package:fhir_r4/fhir_r4.dart';
 import 'package:flutter/foundation.dart';
-
-import 'fhir_r4_path_compat.dart';
 
 class FhirPathExpressionEvaluator extends FhirExpressionEvaluator {
   static final _logger = Logger(FhirPathExpressionEvaluator);
@@ -34,7 +33,7 @@ class FhirPathExpressionEvaluator extends FhirExpressionEvaluator {
           upstreamExpressions,
           debugLabel: debugLabel,
         ) {
-    if (fhirPathExpression.language != FhirExpressionLanguage.text_fhirpath) {
+    if (fhirPathExpression.language != FhirExpressionLanguage.textFhirpath.value) {
       throw ArgumentError(
         '$name has wrong language: ${fhirPathExpression.language}',
       );
@@ -124,7 +123,7 @@ class FhirPathExpressionEvaluator extends FhirExpressionEvaluator {
 
       return firstResult != null;
     } else {
-      return firstResult as bool;
+      return firstResult;
     }
   }
 

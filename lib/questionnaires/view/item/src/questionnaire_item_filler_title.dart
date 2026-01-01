@@ -1,4 +1,3 @@
-import 'package:faiadashu/fhir_types/fhir_types.dart';
 import 'package:faiadashu/logging/logging.dart';
 import 'package:faiadashu/questionnaires/questionnaires.dart';
 import 'package:flutter/material.dart';

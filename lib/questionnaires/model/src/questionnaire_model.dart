@@ -1,4 +1,3 @@
-import 'package:faiadashu/fhir_types/fhir_types.dart';
 import 'package:faiadashu/logging/logging.dart';
 import 'package:faiadashu/questionnaires/questionnaires.dart';
 import 'package:faiadashu/resource_provider/resource_provider.dart';
@@ -377,7 +376,7 @@ class QuestionnaireModel {
       itemModelList.add(
         _createIfAbsent(
           item,
-          item.linkId?.value ?? '',
+          item.linkId.value ?? '',
           parent,
           level,
         ),

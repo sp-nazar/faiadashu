@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:collection/collection.dart';
 import 'package:faiadashu/coding/coding.dart';
-import 'package:faiadashu/fhir_types/fhir_types.dart';
 import 'package:faiadashu/logging/logging.dart';
 import 'package:faiadashu/questionnaires/questionnaires.dart';
 import 'package:fhir_r4/fhir_r4.dart';

@@ -31,7 +31,7 @@ class DateTimeAnswerModel extends AnswerModel<FhirDateTime, FhirDateTime> {
     }
 
     if (itemType.value == 'date') {
-      final dateValue = value?.valueDateTime ?? value?.value;
+      final dateValue = value.valueDateTime ?? value.value;
       return QuestionnaireResponseAnswer(
         valueDate:
             dateValue is DateTime ? FhirDate.fromDateTime(dateValue) : null,
@@ -43,7 +43,7 @@ class DateTimeAnswerModel extends AnswerModel<FhirDateTime, FhirDateTime> {
         item: items,
       );
     } else if (itemType.value == 'time') {
-      final timeValue = value?.valueDateTime ?? value?.value;
+      final timeValue = value.valueDateTime ?? value.value;
       return QuestionnaireResponseAnswer(
         valueTime: FhirTime(
           timeValue is DateTime
