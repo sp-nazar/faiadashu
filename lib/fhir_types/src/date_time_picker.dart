@@ -60,10 +60,12 @@ class _FhirDateTimePickerState extends State<FhirDateTimePicker> {
 
   Future<void> _showPicker(Locale locale) async {
     DateTime dateTime = DateTime(1970);
+    final initialDateTime =
+        _dateTimeValue?.value is DateTime ? _dateTimeValue?.value as DateTime : DateTime.now();
 
     if (widget.pickerType != FhirTime) {
       final date = await showDatePicker(
-        initialDate: _dateTimeValue?.value ?? DateTime.now(),
+        initialDate: initialDateTime,
         firstDate: widget.firstDate,
         lastDate: widget.lastDate,
         locale: locale,
@@ -79,8 +81,7 @@ class _FhirDateTimePickerState extends State<FhirDateTimePicker> {
     if (mounted &&
         (widget.pickerType == FhirDateTime || widget.pickerType == FhirTime)) {
       final time = await showTimePicker(
-        initialTime:
-            TimeOfDay.fromDateTime(_dateTimeValue?.value ?? DateTime.now()),
+        initialTime: TimeOfDay.fromDateTime(initialDateTime),
         context: context,
         builder: (context, child) {
           return Localizations.override(
@@ -104,9 +105,7 @@ class _FhirDateTimePickerState extends State<FhirDateTimePicker> {
       );
     }
 
-    final fhirDateTime = FhirDateTime(
-      dateTime,
-    );
+    final fhirDateTime = FhirDateTime.fromDateTime(dateTime);
     setState(() {
       _dateTimeFieldController.text = (widget.pickerType == FhirTime)
           ? DateFormat.jm(locale.toString()).format(dateTime)

@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:faiadashu/logging/logging.dart';
 import 'package:fhir_r4/fhir_r4.dart';
 import 'package:intl/intl.dart';
+import 'package:faiadashu/fhir_types/src/fhir_r4_compat.dart';
 
 extension FDashTimeExtension on FhirTime {
   String format(Locale locale, {String defaultText = ''}) {
@@ -36,7 +37,11 @@ extension FDashDateExtension on FhirDate {
     //     return defaultText;
     // }
 
-    return dateFormat.format(value);
+    final dateValue = value;
+    if (dateValue is DateTime) {
+      return dateFormat.format(dateValue);
+    }
+    return defaultText;
   }
 }
 
@@ -74,7 +79,11 @@ extension FDashDateTimeExtension on FhirDateTime {
     //     return defaultText;
     // }
 
-    return dateFormat.format(value);
+    final dateValue = value;
+    if (dateValue is DateTime) {
+      return dateFormat.format(dateValue);
+    }
+    return defaultText;
   }
 }
 
@@ -167,12 +176,13 @@ extension FDashCodingExtension on Coding {
     if (translationExtension != null) {
       final contentString = translationExtension.extension_
           ?.extensionOrNull('content')
+          ?.valueString
           ?.valueString;
 
       return ArgumentError.checkNotNull(contentString);
     }
 
-    return display ?? code?.value ?? toString();
+    return display?.valueString ?? code?.value ?? toString();
   }
 }
 
@@ -188,8 +198,8 @@ extension FDashListCodingExtension on List<Coding> {
 extension FDashCodeableConceptExtension on CodeableConcept {
   /// Localized access to display value
   String localizedDisplay(Locale locale) {
-    return coding?.firstOrNull?.display ??
-        text ??
+    return coding?.firstOrNull?.display?.valueString ??
+        text?.valueString ??
         coding?.firstOrNull?.code?.value ??
         toString();
   }
@@ -213,12 +223,15 @@ extension FDashPatientExtension on Patient {
       return null;
     }
 
-    return Reference(type: FhirUri('Patient'), reference: 'Patient/$id');
+    return Reference(
+      type: FhirUri('Patient'),
+      reference: FhirString('Patient/${id?.valueString ?? ''}'),
+    );
   }
 }
 
 extension ResoureExtension on Resource {
-  String? get id => fhirId;
+  String? get fhirId => id?.valueString;
 }
 
 /// Access to [FhirExtension]s from a List.

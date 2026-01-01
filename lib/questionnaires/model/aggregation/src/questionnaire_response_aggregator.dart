@@ -1,5 +1,4 @@
 import 'package:faiadashu/coding/coding.dart';
-import 'package:faiadashu/fhir_types/fhir_types.dart';
 import 'package:faiadashu/logging/logging.dart';
 import 'package:faiadashu/questionnaires/questionnaires.dart';
 import 'package:fhir_r4/fhir_r4.dart';
@@ -14,7 +13,12 @@ class QuestionnaireResponseAggregator
   static final Logger _logger = Logger(QuestionnaireResponseAggregator);
 
   QuestionnaireResponseAggregator()
-      : super(QuestionnaireResponse(), autoAggregate: false);
+      : super(
+          QuestionnaireResponse(
+            status: QuestionnaireResponseStatus.inProgress,
+          ),
+          autoAggregate: false,
+        );
 
   QuestionnaireResponseItem? _fromQuestionItem(
     QuestionItemModel itemModel,
@@ -67,13 +71,16 @@ class QuestionnaireResponseAggregator
     }
 
     final responseItem = QuestionnaireResponseItem(
-      linkId: itemModel.questionnaireItemModel.linkId,
-      text: itemModel.questionnaireItemModel.text?.plainText,
+      linkId: itemModel.questionnaireItemModel.linkId?.toFhirString ??
+          FhirString(''),
+      text: itemModel.questionnaireItemModel.text?.plainText?.toFhirString,
       // TODO: Include textElement
       extension_: (dataAbsentReason != null)
           ? [
               FhirExtension(
-                url: dataAbsentReasonExtensionUrl,
+                url: FhirString(
+                  dataAbsentReasonExtensionUrl.valueString ?? '',
+                ),
                 valueCode: dataAbsentReason,
               ),
             ]
@@ -100,8 +107,9 @@ class QuestionnaireResponseAggregator
 
     if (nestedItems != null) {
       final responseItem = QuestionnaireResponseItem(
-        linkId: itemModel.questionnaireItemModel.linkId,
-        text: itemModel.questionnaireItemModel.text?.plainText,
+        linkId: itemModel.questionnaireItemModel.linkId?.toFhirString ??
+            FhirString(''),
+        text: itemModel.questionnaireItemModel.text?.plainText?.toFhirString,
         // TODO: include textElement
         item: nestedItems,
       );
@@ -213,8 +221,10 @@ class QuestionnaireResponseAggregator
         subjectReference = subject.reference;
       } else {
         if (subject.id != null) {
-          subjectReference =
-              Reference(type: FhirUri('Patient'), reference: '#${subject.id}');
+          subjectReference = Reference(
+            type: FhirUri('Patient'),
+            reference: FhirString('#${subject.id}'),
+          );
           contained.add(subject);
         }
       }
@@ -245,29 +255,16 @@ class QuestionnaireResponseAggregator
         : NarrativeAggregator.emptyNarrative;
 
     final questionnaireResponse = QuestionnaireResponse(
-      fhirId: questionnaireResponseId,
-      status: responseStatus,
+      id: questionnaireResponseId?.toFhirString,
+      status: QuestionnaireResponseStatus(responseStatus.value),
       meta: meta,
       contained: (contained.isNotEmpty) ? contained : null,
       questionnaire: questionnaireCanonical,
       item: responseItems,
-      authored: FhirDateTime(DateTime.now()),
-      text: (narrative?.status == NarrativeStatus.empty) ? null : narrative,
-      language: FhirCode(locale.toLanguageTag()),
+      authored: FhirDateTime.fromDateTime(DateTime.now()),
+      text: (narrative?.status == NarrativeStatus.empty_) ? null : narrative,
+      language: CommonLanguages(locale.toLanguageTag()),
       subject: subjectReference,
-      questionnaireElement: (questionnaireTitle != null)
-          ? Element(
-              extension_: [
-                FhirExtension(
-                  url: FhirUri(
-                    'http://hl7.org/fhir/StructureDefinition/display',
-                  ),
-                  valueString: questionnaireResponseModel
-                      .questionnaireModel.questionnaire.title,
-                ),
-              ],
-            )
-          : null,
     );
 
     if (notifyListeners) {

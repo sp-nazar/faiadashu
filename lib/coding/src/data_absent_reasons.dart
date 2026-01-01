@@ -10,56 +10,56 @@ final dataAbsentReasonSystem =
 /// There is information on this item available but it has not been provided by the sender due to security, privacy or other reasons.
 final dataAbsentReasonMasked = Coding(
   code: dataAbsentReasonMaskedCode,
-  display: 'Masked',
+  display: 'Masked'.toFhirString,
   system: dataAbsentReasonSystem,
 );
 
-const dataAbsentReasonMaskedCode = FhirCode.asConst('masked');
+final dataAbsentReasonMaskedCode = FhirCode('masked');
 
 /// This information has not been sought (e.g., patient was not asked)
 final dataAbsentReasonNotAsked = Coding(
   code: dataAbsentReasonNotAskedCode,
-  display: 'Not Asked',
+  display: 'Not Asked'.toFhirString,
   system: dataAbsentReasonSystem,
 );
 
-const dataAbsentReasonNotAskedCode = FhirCode.asConst('not-asked');
+final dataAbsentReasonNotAskedCode = FhirCode('not-asked');
 
 /// Information was sought but not found (e.g., patient was asked but didn't know)
 final dataAbsentReasonAskedButUnknown = Coding(
   code: dataAbsentReasonAskedButUnknownCode,
-  display: 'Asked But Unknown',
+  display: 'Asked But Unknown'.toFhirString,
   system: dataAbsentReasonSystem,
 );
 
-const dataAbsentReasonAskedButUnknownCode = FhirCode.asConst('asked-unknown');
+final dataAbsentReasonAskedButUnknownCode = FhirCode('asked-unknown');
 
 /// The source was asked but declined to answer.
 final dataAbsentReasonAskedButDeclined = Coding(
   code: dataAbsentReasonAskedButDeclinedCode,
-  display: 'Asked But Declined',
+  display: 'Asked But Declined'.toFhirString,
   system: dataAbsentReasonSystem,
 );
 
-const dataAbsentReasonAskedButDeclinedCode = FhirCode.asConst('asked-declined');
+final dataAbsentReasonAskedButDeclinedCode = FhirCode('asked-declined');
 
 /// Information is not available at this time but it is expected that it will be available later.
 final dataAbsentReasonTemporarilyUnknown = Coding(
   code: dataAbsentReasonTempUnknownCode,
-  display: 'Temporarily Unknown',
+  display: 'Temporarily Unknown'.toFhirString,
   system: dataAbsentReasonSystem,
 );
 
-const dataAbsentReasonTempUnknownCode = FhirCode.asConst('temp-unknown');
+final dataAbsentReasonTempUnknownCode = FhirCode('temp-unknown');
 
-const dataAbsentReasonAsTextCode = FhirCode.asConst('as-text');
+final dataAbsentReasonAsTextCode = FhirCode('as-text');
 
-const dataAbsentReasonErrorCode = FhirCode.asConst('error');
+final dataAbsentReasonErrorCode = FhirCode('error');
 
 // Some system or workflow process error means that the information is not available.
 final dataAbsentReasonError = Coding(
   code: dataAbsentReasonErrorCode,
-  display: 'Error',
+  display: 'Error'.toFhirString,
   system: dataAbsentReasonSystem,
 );
 
@@ -70,7 +70,7 @@ final dataAbsentReasonError = Coding(
 /// this may be due to system limitations, or this particular data value.
 final dataAbsentReasonAsText = Coding(
   code: dataAbsentReasonAsTextCode,
-  display: 'As Text',
+  display: 'As Text'.toFhirString,
   system: dataAbsentReasonSystem,
 );
 
