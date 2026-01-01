@@ -26,7 +26,7 @@ class ItemMediaModel {
             ? _htmlEscape.convert(altText.plainText)
             : '';
 
-    return '<img alt="$altTagContent" src="data:${attachment.contentType?.value!};base64,${attachment.data!}" />';
+    return '<img alt="$altTagContent" src="data:${attachment.contentType};base64,${attachment.data!}" />';
   }
 
   static ItemMediaModel? fromAttachment(
@@ -35,7 +35,7 @@ class ItemMediaModel {
     RenderingString? altText,
   }) {
     final supportedAttachment = attachment != null &&
-        (attachment.contentType?.value?.startsWith('image/') ?? false) &&
+        (attachment.contentType?.startsWith('image/') ?? false) &&
         attachment.data != null;
 
     return supportedAttachment

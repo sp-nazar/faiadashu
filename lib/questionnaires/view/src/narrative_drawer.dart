@@ -62,7 +62,7 @@ class _NarrativeDrawerState extends State<NarrativeDrawer> {
                       onPressed: () {
                         Clipboard.setData(
                           ClipboardData(
-                            text: _drawerMode
+                            text: (_drawerMode
                                 ? const JsonEncoder.withIndent('    ').convert(
                                     QuestionnaireResponseFiller.of(context)
                                         .aggregator<
@@ -73,7 +73,8 @@ class _NarrativeDrawerState extends State<NarrativeDrawer> {
                                 : QuestionnaireResponseFiller.of(context)
                                     .aggregator<NarrativeAggregator>()
                                     .aggregate()
-                                    ?.div ?? '',
+                                    ?.div ??
+                                '') as String,
                           ),
                         ).then((_) {
                           if (!context.mounted) {

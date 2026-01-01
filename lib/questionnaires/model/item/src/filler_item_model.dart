@@ -176,7 +176,7 @@ abstract class FillerItemModel extends ResponseNode {
   void activateEnableWhen() {
     if (!_enableWhenActivated) {
       questionnaireItemModel.forEnableWhens((qew) {
-        fromLinkId(qew.question!)
+        fromLinkId(qew.question!.value)
             .addListener(() => questionnaireResponseModel.updateEnabledItems());
       });
 

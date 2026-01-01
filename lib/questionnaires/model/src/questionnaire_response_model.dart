@@ -482,10 +482,10 @@ class QuestionnaireResponseModel {
     }
 
     for (final item in questionnaireResponseItems) {
-      final linkId = item.linkId!;
+      final linkId = item.linkId!.value;
       final qim = questionnaireModel.fromLinkId(linkId);
       final rim = responseItemModels.firstWhereOrNull(
-        (rim) => rim.questionnaireItemModel.linkId == linkId,
+        (rim) => rim.questionnaireItemModel.linkId?.value == linkId,
       );
       if (qim.isGroup) {
         if (rim != null) {

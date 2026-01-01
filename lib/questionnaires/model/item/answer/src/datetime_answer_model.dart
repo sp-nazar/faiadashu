@@ -32,7 +32,7 @@ class DateTimeAnswerModel extends AnswerModel<FhirDateTime, FhirDateTime> {
 
     if (itemType.value == 'date') {
       return QuestionnaireResponseAnswer(
-        valueDate: FhirDate(value.value),
+        valueDate: FhirDate.fromDateTime(value.value!),
         item: items,
       );
     } else if (itemType.value == 'datetime') {
@@ -75,12 +75,12 @@ class DateTimeAnswerModel extends AnswerModel<FhirDateTime, FhirDateTime> {
       return;
     }
 
-    value = FhirDateTime(evaluationResult);
+    value = FhirDateTime.fromDateTime(evaluationResult);
   }
 
   @override
   void populate(QuestionnaireResponseAnswer answer) {
     value = answer.valueDateTime ??
-        ((answer.valueDate != null) ? FhirDateTime(answer.valueDate) : null);
+        ((answer.valueDate != null) ? FhirDateTime.fromDateTime(answer.valueDate!.value!) : null);
   }
 }

@@ -86,7 +86,7 @@ class RenderingString with Diagnosticable {
         ? xhtmlText
         : (renderingXhtml != null)
             ? ((renderingStyle != null)
-                ? '<span style="$renderingStyle">$renderingXhtml</span>'
+                ? '<span style="${renderingStyle.value}">$renderingXhtml</span>'
                 : renderingXhtml)
             : (renderingMarkdown != null)
                 ? markdownToHtml(
@@ -104,9 +104,9 @@ class RenderingString with Diagnosticable {
           renderingStyle == null &&
           renderingXhtml == null &&
           renderingMarkdown == null,
-      renderingStyle: renderingStyle,
-      renderingXhtml: renderingXhtml,
-      renderingMarkdown: renderingMarkdown,
+      renderingStyle: renderingStyle?.value,
+      renderingXhtml: renderingXhtml?.value,
+      renderingMarkdown: renderingMarkdown?.value,
     );
   }
 

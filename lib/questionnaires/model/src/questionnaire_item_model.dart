@@ -110,7 +110,7 @@ class QuestionnaireItemModel with Diagnosticable {
         )
         ?.extension_
         ?.firstWhereOrNull((ext) => ext.url?.value.toString() == 'expression')
-        ?.valueString;
+        ?.valueString?.value;
   }
 
   String? get constraintHuman {
@@ -122,7 +122,7 @@ class QuestionnaireItemModel with Diagnosticable {
         )
         ?.extension_
         ?.firstWhereOrNull((ext) => ext.url?.value.toString() == 'human')
-        ?.valueString;
+        ?.valueString?.value;
   }
 
   /// Is this item's value calculated?
@@ -267,7 +267,7 @@ class QuestionnaireItemModel with Diagnosticable {
 
   /// The name of a section, the text of a question or text content for a display item.
   RenderingString? get text {
-    final plainText = questionnaireItem.text;
+    final plainText = questionnaireItem.text?.value;
 
     return (plainText != null)
         ? RenderingString.fromText(
@@ -284,7 +284,7 @@ class QuestionnaireItemModel with Diagnosticable {
   /// This is the unaltered prefix from the FHIR Questionnaire.
   /// [FillerItemModel.prefix] can provide programmatically generated prefixes.
   RenderingString? get prefix {
-    final plainPrefix = questionnaireItem.prefix;
+    final plainPrefix = questionnaireItem.prefix?.value;
 
     return (plainPrefix != null)
         ? RenderingString.fromText(
@@ -301,7 +301,7 @@ class QuestionnaireItemModel with Diagnosticable {
         ?.extensionOrNull(
           'http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-shortText',
         )
-        ?.valueString;
+        ?.valueString?.value;
   }
 
   ItemMediaModel? _itemMedia;

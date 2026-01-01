@@ -30,10 +30,11 @@ class StringAnswerModel extends AnswerModel<String, String> {
               'http://hl7.org/fhir/StructureDefinition/minLength',
             )
             ?.valueInteger
-            ?.value ??
+            ?.value
+            ?.toInt() ??
         0;
 
-    maxLength = qi.maxLength?.value;
+    maxLength = qi.maxLength?.value?.toInt();
 
     final keyboardExtension = qi.extension_
         ?.extensionOrNull(
@@ -109,8 +110,8 @@ class StringAnswerModel extends AnswerModel<String, String> {
     final dataAbsentReasonExtension = !valid
         ? [
             FhirExtension(
-              url: dataAbsentReasonExtensionUrl,
-              valueCode: dataAbsentReasonAsTextCode,
+              url: FhirString('http://hl7.org/fhir/StructureDefinition/data-absent-reason'),
+              valueCode: FhirCode('as-text'),
             ),
           ]
         : null;
@@ -118,7 +119,7 @@ class StringAnswerModel extends AnswerModel<String, String> {
     return (value != null && value.isNotEmpty)
         ? (qi.type.value != 'url')
             ? QuestionnaireResponseAnswer(
-                valueString: value,
+                valueString: FhirString(value),
                 extension_: dataAbsentReasonExtension,
                 item: items,
               )
@@ -146,6 +147,6 @@ class StringAnswerModel extends AnswerModel<String, String> {
 
   @override
   void populate(QuestionnaireResponseAnswer answer) {
-    value = answer.valueString;
+    value = answer.valueString?.value;
   }
 }

@@ -103,8 +103,8 @@ class CodingAnswerModel extends AnswerModel<OptionsOrString, OptionsOrString> {
   Set<String>? toggleOption(String uid) {
     _logger.trace('Enter toggledValue $uid');
 
-    final isSingleChoiceExclusive =
-        !(questionnaireItemModel.questionnaireItem.repeats?.value ?? false);
+    final repeatsValue = questionnaireItemModel.questionnaireItem.repeats?.value ?? false;
+    final isSingleChoiceExclusive = !repeatsValue;
     if (isSingleChoiceExclusive) {
       return {uid};
     }
@@ -159,7 +159,7 @@ class CodingAnswerModel extends AnswerModel<OptionsOrString, OptionsOrString> {
                 ?.extensionOrNull(
                   'http://hl7.org/fhir/uv/sdc/StructureDefinition/questionnaire-sdc-openLabel',
                 )
-                ?.valueString ??
+                ?.valueString?.value ??
             lookupFDashLocalizations(locale).fillerOpenCodingOtherLabel,
       );
 
@@ -220,14 +220,16 @@ class CodingAnswerModel extends AnswerModel<OptionsOrString, OptionsOrString> {
                   'http://hl7.org/fhir/StructureDefinition/questionnaire-minOccurs',
                 )
                 ?.valueInteger
-                ?.value ??
+                ?.value
+                ?.toInt() ??
             0,
         maxOccurs = responseModel.questionnaireItem.extension_
             ?.extensionOrNull(
               'http://hl7.org/fhir/StructureDefinition/questionnaire-maxOccurs',
             )
             ?.valueInteger
-            ?.value {
+            ?.value
+            ?.toInt() {
     _createAnswerOptions();
   }
 
@@ -316,7 +318,9 @@ class CodingAnswerModel extends AnswerModel<OptionsOrString, OptionsOrString> {
 
     final int totalCount = selectedOptionsCount + openStringsCount;
 
-    if (!(questionnaireItemModel.questionnaireItem.repeats?.value ?? false)) {
+    final repeatsValue = questionnaireItemModel.questionnaireItem.repeats?.value ?? false;
+
+    if (!repeatsValue) {
       if (totalCount != 1) {
         return lookupFDashLocalizations(locale)
             .validatorSingleSelectionOrSingleOpenString(openLabel.plainText);
@@ -354,7 +358,7 @@ class CodingAnswerModel extends AnswerModel<OptionsOrString, OptionsOrString> {
               final answerExtensions = <FhirExtension>[
                 if (answerOption.hasMedia)
                   FhirExtension(
-                    url: FhirUri(
+                    url: FhirString(
                       'http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemAnswerMedia',
                     ),
                     valueAttachment: answerOption.itemMedia?.attachment,
@@ -373,7 +377,7 @@ class CodingAnswerModel extends AnswerModel<OptionsOrString, OptionsOrString> {
     // Add openStrings
     final openStringResponses = value?.openStrings?.map(
           (openString) => QuestionnaireResponseAnswer(
-            valueString: openString,
+            valueString: FhirString(openString),
             item: items,
           ),
         ) ??
@@ -403,7 +407,7 @@ class CodingAnswerModel extends AnswerModel<OptionsOrString, OptionsOrString> {
   ) {
     final selectedOptions = <String>{};
     for (final coding in codings) {
-      final matchCode = coding.code?.value ?? coding.display;
+      final matchCode = coding.code?.value ?? coding.display?.value;
 
       final matchingOption = answerOptions
           .firstWhereOrNull((answerOption) => answerOption.matches(matchCode));
@@ -433,8 +437,8 @@ class CodingAnswerModel extends AnswerModel<OptionsOrString, OptionsOrString> {
     final selectedOptions = <String>{};
     for (final answer in answers) {
       final matchCode = answer.valueCoding?.code?.value ??
-          answer.valueCoding?.display ??
-          answer.valueString;
+          answer.valueCoding?.display?.value ??
+          answer.valueString?.value;
 
       final matchingOption = answerOptions
           .firstWhereOrNull((answerOption) => answerOption.matches(matchCode));
@@ -442,7 +446,7 @@ class CodingAnswerModel extends AnswerModel<OptionsOrString, OptionsOrString> {
       if (matchingOption != null) {
         selectedOptions.add(matchingOption.uid);
       } else {
-        final newOpenString = answer.valueCoding?.display ?? answer.valueString;
+        final newOpenString = answer.valueCoding?.display?.value ?? answer.valueString?.value;
         if (newOpenString != null) {
           openStrings.add(newOpenString);
         }

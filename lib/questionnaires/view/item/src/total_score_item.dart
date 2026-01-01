@@ -69,7 +69,7 @@ class _TotalScoreItemState extends State<TotalScoreItem> {
     _logger.debug('calculated result: $calcResult');
   }
 
-  final _nullExtension = FhirExtension();
+  final _nullExtension = FhirExtension(url: FhirString('null'));
 
   /// Return a feedback string according to the Danish eHealth Sundhed DK spec.
   String? findDanishFeedback(int? score) {
@@ -91,7 +91,7 @@ class _TotalScoreItemState extends State<TotalScoreItem> {
 
     return (matchExtension == _nullExtension)
         ? null
-        : matchExtension!.extension_!.extensionOrNull('value')!.valueString;
+        : matchExtension!.extension_!.extensionOrNull('value')!.valueString?.value;
   }
 
   @override

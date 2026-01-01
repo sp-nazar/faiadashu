@@ -23,7 +23,7 @@ class FhirPathExpressionEvaluator extends FhirExpressionEvaluator {
     Iterable<ExpressionEvaluator> upstreamExpressions, {
     this.jsonBuilder,
     String? debugLabel,
-  })  : fhirPath = ArgumentError.checkNotNull(fhirPathExpression.expression),
+  })  : fhirPath = ArgumentError.checkNotNull(fhirPathExpression.expression?.value),
         super(
           fhirPathExpression,
           upstreamExpressions,

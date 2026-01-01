@@ -122,7 +122,7 @@ class QuestionnaireItemFillerTitle extends StatelessWidget {
         ?.value;
 
     if (supportLink != null) {
-      return _QuestionnaireItemFillerSupportLink(supportLink, key: key);
+      return _QuestionnaireItemFillerSupportLink(Uri.parse(supportLink), key: key);
     }
 
     return null;

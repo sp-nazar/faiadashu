@@ -29,7 +29,7 @@ class _QuestionnaireCompleteButtonState
         final qrm = qf.questionnaireResponseModel;
         final currentResponseStatus = qrm.responseStatus;
 
-        if (currentResponseStatus.value != 'completed') {
+        if (currentResponseStatus != 'completed') {
           final incompleteItems = qrm.validate(notifyListeners: true);
           qrm.invalidityNotifier.value = incompleteItems;
 
@@ -38,7 +38,7 @@ class _QuestionnaireCompleteButtonState
           }
         }
 
-        final newResponseStatus = (currentResponseStatus.value == 'completed')
+        final newResponseStatus = (currentResponseStatus == 'completed')
             ? FhirCode('in-progress')
             : FhirCode('completed');
 
@@ -46,21 +46,19 @@ class _QuestionnaireCompleteButtonState
           qrm.responseStatus = newResponseStatus;
         });
 
-        if (newResponseStatus.value == 'completed') {
+        if (newResponseStatus == 'completed') {
           widget.onCompleted?.call();
         }
       },
       icon: (QuestionnaireResponseFiller.of(context)
                   .questionnaireResponseModel
-                  .responseStatus
-                  .value !=
+                  .responseStatus !=
               'completed')
           ? const Icon(Icons.check_circle)
           : const Icon(Icons.edit),
       label: (QuestionnaireResponseFiller.of(context)
                   .questionnaireResponseModel
-                  .responseStatus
-                  .value !=
+                  .responseStatus !=
               'completed')
           ? Text(
               FDashLocalizations.of(context)

@@ -1,10 +1,10 @@
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
+import 'package:faiadashu/fhir_types/src/fhir_r4_compat.dart';
 import 'package:faiadashu/logging/logging.dart';
 import 'package:fhir_r4/fhir_r4.dart';
 import 'package:intl/intl.dart';
-import 'package:faiadashu/fhir_types/src/fhir_r4_compat.dart';
 
 extension FDashTimeExtension on FhirTime {
   String format(Locale locale, {String defaultText = ''}) {

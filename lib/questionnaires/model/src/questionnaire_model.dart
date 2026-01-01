@@ -101,7 +101,7 @@ class QuestionnaireModel {
   }
 
   RenderingString? get title {
-    final plainTitle = questionnaire.title;
+    final plainTitle = questionnaire.title?.value;
 
     return (plainTitle != null)
         ? RenderingString.fromText(
@@ -377,7 +377,7 @@ class QuestionnaireModel {
       itemModelList.add(
         _createIfAbsent(
           item,
-          item.linkId,
+          item.linkId?.value,
           parent,
           level,
         ),
