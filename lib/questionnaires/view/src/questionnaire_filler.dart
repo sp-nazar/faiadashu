@@ -34,7 +34,7 @@ class QuestionnaireResponseFiller extends StatefulWidget {
             questionnaireModelDefaults: questionnaireModelDefaults,
           );
 
-  const QuestionnaireResponseFiller({
+  QuestionnaireResponseFiller({
     super.key,
     required this.locale,
     required this.builder,
@@ -44,8 +44,9 @@ class QuestionnaireResponseFiller extends StatefulWidget {
     this.onDataAvailable,
     this.onLinkTap,
     this.questionnaireTheme = const QuestionnaireThemeData(),
-    this.questionnaireModelDefaults = const QuestionnaireModelDefaults(),
-  });
+    QuestionnaireModelDefaults? questionnaireModelDefaults,
+  }) : questionnaireModelDefaults =
+            questionnaireModelDefaults ?? QuestionnaireModelDefaults();
 
   static QuestionnaireFillerData of(BuildContext context) {
     final result =

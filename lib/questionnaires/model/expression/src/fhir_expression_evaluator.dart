@@ -18,7 +18,7 @@ abstract class FhirExpressionEvaluator extends ExpressionEvaluator {
     Resource? Function()? resourceBuilder,
     FhirExpression fhirExpression,
     Iterable<ExpressionEvaluator> upstreamExpressions, {
-    Map<String, dynamic>? Function()? jsonBuilder,
+    FhirBase? Function()? contextBuilder,
     String? debugLabel,
   }) {
     final language = ArgumentError.checkNotNull(fhirExpression.language);
@@ -27,7 +27,8 @@ abstract class FhirExpressionEvaluator extends ExpressionEvaluator {
         resourceBuilder,
         fhirExpression,
         upstreamExpressions,
-        jsonBuilder: jsonBuilder,
+        jsonBuilder: contextBuilder,
+        contextBuilder: contextBuilder,
         debugLabel: debugLabel,
       );
     } else if (language == FhirExpressionLanguage.application_x_fhir_query) {

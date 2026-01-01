@@ -8,7 +8,7 @@ class FhirQueryExpressionEvaluator extends FhirExpressionEvaluator {
   });
 
   @override
-  dynamic evaluate({int? generation}) {
+  Future<dynamic> evaluate({int? generation}) async {
     // TODO: implement evaluate
     return [];
   }

@@ -1,23 +1,27 @@
 import 'package:fhir_r4/fhir_r4.dart';
+import 'package:fhir_r4_path/fhir_r4_path.dart' as r4path;
 
-/// Minimal compatibility layer to mimic the synchronous API provided by the old
-/// `fhir_path` package. The new `fhir_r4_path` API is asynchronous and uses a
-/// different set of types, so for now we provide lightweight stand-ins that
-/// preserve the existing call sites. The implementation can be expanded to use
-/// the full `fhir_r4_path` engine as needed.
-typedef ParserList = String;
+typedef ParserList = r4path.ExpressionNode;
 
-ParserList parseFhirPath(String pathExpression) => pathExpression;
+Future<ParserList> parseFhirPath(String pathExpression) =>
+    r4path.parseFhirPath(pathExpression);
 
-List<FhirBase> executeFhirPath({
-  required dynamic context,
+Future<List<FhirBase>> executeFhirPath({
+  required FhirBase? context,
   required ParserList parsedFhirPath,
   required String pathExpression,
+  FhirBase? resource,
+  FhirBase? rootResource,
   Map<String, dynamic>? environment,
-}) {
-  // TODO: Integrate with the asynchronous engine from `fhir_r4_path`.
-  return <FhirBase>[];
-}
+}) =>
+    r4path.executeFhirPath(
+      context: context,
+      parsedFhirPath: parsedFhirPath,
+      pathExpression: pathExpression,
+      resource: resource,
+      rootResource: rootResource,
+      environment: environment,
+    );
 
 /// Legacy names for expression languages.
 class FhirExpressionLanguage {

@@ -377,7 +377,7 @@ class QuestionnaireModel {
       itemModelList.add(
         _createIfAbsent(
           item,
-          item.linkId?.value,
+          item.linkId?.value ?? '',
           parent,
           level,
         ),

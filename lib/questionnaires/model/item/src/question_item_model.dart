@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:collection/collection.dart';
@@ -45,7 +46,7 @@ class QuestionItemModel extends ResponseItemModel {
             [
               ...itemWithPredecessorsExpressionEvaluators,
             ],
-            jsonBuilder: () =>
+            contextBuilder: () =>
                 questionnaireResponseModel.fhirResponseItemByUid(nodeUid),
           )
         : null;
@@ -62,10 +63,10 @@ class QuestionItemModel extends ResponseItemModel {
   /// Triggers all required activities when any of the answers have changed.
   ///
   /// Creates nested fillers if needed.
-  void handleChangedAnswer(
+  Future<void> handleChangedAnswer(
     AnswerModel answerModel, {
     required bool isAnsweredChange,
-  }) {
+  }) async {
     final flow = Flow.begin();
     Timeline.startSync('handleChangedAnswer', flow: flow);
     bool isStructuralChange = false;
@@ -96,12 +97,12 @@ class QuestionItemModel extends ResponseItemModel {
           item.activateEnableWhen();
         }
 
-        questionnaireResponseModel.updateEnabledItems();
+        await questionnaireResponseModel.updateEnabledItems();
       }
     }
 
     // Updates all error texts, but will not notify.
-    validate();
+    await validate();
 
     nextGeneration(
       flow: Flow.end(flow.id),
@@ -170,14 +171,14 @@ class QuestionItemModel extends ResponseItemModel {
   }
 
   @override
-  Map<String, String>? validate({
+  Future<Map<String, String>?> validate({
     bool updateErrorText = true,
     bool notifyListeners = false,
-  }) {
+  }) async {
     // Non-existent answer models can be invalid, e.g. if minOccurs is not met.
     _ensureAnswerModel();
 
-    final responseErrorTexts = super.validate(
+    final responseErrorTexts = await super.validate(
           updateErrorText: updateErrorText,
           notifyListeners: notifyListeners,
         ) ??
@@ -315,10 +316,10 @@ class QuestionItemModel extends ResponseItemModel {
 
   /// Populates the initial value of the item.
   /// Does nothing if initial value is not specified.
-  void populateInitialValue() {
+  Future<void> populateInitialValue() async {
     _qimLogger.debug('populateInitialValue: $nodeUid');
     if (questionnaireItemModel.hasInitialExpression) {
-      final initialEvaluationResult = evaluateInitialExpression();
+      final initialEvaluationResult = await evaluateInitialExpression();
       firstAnswerModel.populateFromExpression(initialEvaluationResult);
     } else {
       // initial.value[x]
@@ -356,7 +357,7 @@ class QuestionItemModel extends ResponseItemModel {
 
             final initialOpenTexts = initialValues
                 .where((qiv) => qiv.valueString != null)
-                .map<String>((qiv) => qiv.valueString!);
+                .map<String>((qiv) => qiv.valueString?.value ?? '');
 
             (firstAnswerModel as CodingAnswerModel)
                 .populateFromCodings(initialCodings, initialOpenTexts);
@@ -375,7 +376,7 @@ class QuestionItemModel extends ResponseItemModel {
   ///
   /// Returns null if the item does not have an initialExpression,
   /// or it evaluates to an empty list.
-  dynamic evaluateInitialExpression() {
+  Future<dynamic> evaluateInitialExpression() async {
     final fhirPathExpression =
         questionnaireItemModel.questionnaireItem.extension_
             ?.extensionOrNull(
@@ -393,7 +394,7 @@ class QuestionItemModel extends ResponseItemModel {
       questionnaireResponseModel.questionnaireLevelExpressionEvaluators,
     );
 
-    final evaluationResult = initialExpressionEvaluator.evaluate(
+    final evaluationResult = await initialExpressionEvaluator.evaluate(
       generation: questionnaireResponseModel.generation,
     );
 
@@ -404,14 +405,14 @@ class QuestionItemModel extends ResponseItemModel {
     return evaluationResult.first;
   }
 
-  void updateCalculatedExpression() {
+  Future<void> updateCalculatedExpression() async {
     final calculatedExpression = _calculatedExpression;
     if (calculatedExpression == null) {
       return;
     }
 
     try {
-      final rawEvaluationResult = calculatedExpression.evaluate(
+      final rawEvaluationResult = await calculatedExpression.evaluate(
         generation: questionnaireResponseModel.generation,
       );
 

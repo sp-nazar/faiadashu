@@ -32,7 +32,7 @@ abstract class ExpressionEvaluator with DiagnosticableTreeMixin {
   /// [generation] can be used to provide an identifier for the point in time,
   /// when this expression was last evaluated. This can allow for caching of
   /// expensive evaluations.
-  dynamic evaluate({int? generation});
+  Future<dynamic> evaluate({int? generation});
 
   ExpressionEvaluator(
     this.name,

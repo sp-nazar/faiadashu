@@ -46,17 +46,17 @@ class _NarrativeTileState extends State<NarrativeTile> {
     String? div;
 
     if (narrative != null) {
-      div = narrative.div?.value;
+      div = narrative.div?.valueString;
     } else {
       final questionnaireResponseModel = widget.questionnaireResponseModel ??
           QuestionnaireResponseFiller.of(context).questionnaireResponseModel;
       div = questionnaireResponseModel
           .aggregator<NarrativeAggregator>()
           .aggregate()
-          ?.div?.value;
+          ?.div?.valueString;
     }
 
-    div ??= NarrativeAggregator.emptyNarrative.div?.value;
+    div ??= NarrativeAggregator.emptyNarrative.div?.valueString;
 
     _narrativeHtmlView = createWebView(div ?? '');
   }

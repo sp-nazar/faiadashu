@@ -54,13 +54,13 @@ class QuestionnaireModelDefaults {
         : null;
   }
 
-  const QuestionnaireModelDefaults({
+  QuestionnaireModelDefaults({
     this.maxDecimal = defaultMaxDecimal,
     this.sliderMaxValue = defaultSliderMaxValue,
-    this.usageMode = usageModeCaptureDisplayNonEmptyCode,
+    FhirCode? usageMode,
     this.prefixBuilder,
     this.disabledDisplay = QuestionnaireDisabledDisplay.hidden,
     this.implicitNullOption = true,
     this.booleanTriState = false,
-  });
+  }) : usageMode = usageMode ?? usageModeCaptureDisplayNonEmptyCode;
 }

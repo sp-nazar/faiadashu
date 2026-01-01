@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:faiadashu/fhir_types/fhir_types.dart';
 import 'package:faiadashu/questionnaires/model/model.dart';
 import 'package:fhir_r4/fhir_r4.dart';
@@ -28,9 +30,11 @@ abstract class AnswerModel<I, V> extends ResponseNode {
           isUnanswered != responseItemModel.isUnanswered ||
           isPopulated != responseItemModel.isPopulated;
 
-      responseItemModel.handleChangedAnswer(
-        this,
-        isAnsweredChange: isAnsweredChange,
+      unawaited(
+        responseItemModel.handleChangedAnswer(
+          this,
+          isAnsweredChange: isAnsweredChange,
+        ),
       );
     }
   }

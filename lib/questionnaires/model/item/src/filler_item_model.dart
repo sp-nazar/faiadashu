@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:faiadashu/fhir_types/fhir_types.dart';
 import 'package:faiadashu/logging/logging.dart';
@@ -100,7 +102,7 @@ abstract class FillerItemModel extends ResponseNode {
           null,
           variableExpression,
           [...itemUpstream, ...qiLevelVars],
-          jsonBuilder: () =>
+          contextBuilder: () =>
               questionnaireResponseModel.fhirResponseItemByUid(nodeUid),
         );
 
@@ -152,7 +154,7 @@ abstract class FillerItemModel extends ResponseNode {
             null,
             enableWhenExtensionExpression,
             itemWithPredecessorsExpressionEvaluators,
-            jsonBuilder: () =>
+            contextBuilder: () =>
                 questionnaireResponseModel.fhirResponseItemByUid(nodeUid),
           )
         : null;
@@ -176,8 +178,12 @@ abstract class FillerItemModel extends ResponseNode {
   void activateEnableWhen() {
     if (!_enableWhenActivated) {
       questionnaireItemModel.forEnableWhens((qew) {
-        fromLinkId(qew.question!.value)
-            .addListener(() => questionnaireResponseModel.updateEnabledItems());
+        fromLinkId(qew.question?.value ?? '')
+            .addListener(
+              () => unawaited(
+                questionnaireResponseModel.updateEnabledItems(),
+              ),
+            );
       });
 
       // Attach individual listeners to parent answers underneath which this item is nested
@@ -191,7 +197,11 @@ abstract class FillerItemModel extends ResponseNode {
 
         // Update the enablement status when the response which owns the parent answer has changed.
         (predecessorResponseNode! as ResponseItemModel)
-            .addListener(() => questionnaireResponseModel.updateEnabledItems());
+            .addListener(
+              () => unawaited(
+                questionnaireResponseModel.updateEnabledItems(),
+              ),
+            );
       }
 
       _enableWhenActivated = true;
@@ -203,13 +213,13 @@ abstract class FillerItemModel extends ResponseNode {
   /// Determines the applicable method (enableWhen / enableWhenExpression / nesting).
   ///
   /// Sets the [isEnabled] property
-  void updateEnabled() {
+  Future<void> updateEnabled() async {
     _fimLogger.trace('Enter updateEnabled()');
 
     if (questionnaireItemModel.isEnabledWhen) {
       _updateEnabledByEnableWhen();
     } else if (questionnaireItemModel.hasEnabledWhenExpression) {
-      _updateEnabledByEnableWhenExpression();
+      await _updateEnabledByEnableWhenExpression();
     } else if (questionnaireItemModel.isNestedItem) {
       _updateEnabledByParentAnswer();
     }
@@ -218,17 +228,20 @@ abstract class FillerItemModel extends ResponseNode {
   /// Updates the current enablement status of this item, based on enabledWhenExpression.
   ///
   /// Sets the [isEnabled] property
-  void _updateEnabledByEnableWhenExpression() {
+  Future<void> _updateEnabledByEnableWhenExpression() async {
     _fimLogger.trace('Enter _updateEnabledByEnableWhenExpression()');
 
     final enableWhenExpression =
         ArgumentError.checkNotNull(_enableWhenExpression);
 
-    if (!(enableWhenExpression as FhirPathExpressionEvaluator).fetchBoolValue(
+    final isEnabled = await (enableWhenExpression as FhirPathExpressionEvaluator)
+        .fetchBoolValue(
       unknownValue: false,
       generation: questionnaireResponseModel.generation,
       location: nodeUid,
-    )) {
+    );
+
+    if (!isEnabled) {
       _nextGenerationDisableWithDescendants();
     }
   }
@@ -268,7 +281,7 @@ abstract class FillerItemModel extends ResponseNode {
     final enableWhenTrigger = _EnableWhenTrigger();
 
     questionnaireItemModel.forEnableWhens((qew) {
-      final questionLinkId = qew.question;
+      final questionLinkId = qew.question?.value ?? '';
       if (questionLinkId == null) {
         throw QuestionnaireFormatException(
           'enableWhen with unspecified linkId.',
@@ -462,8 +475,8 @@ abstract class FillerItemModel extends ResponseNode {
     QuestionnaireEnableWhen qew,
     _EnableWhenTrigger enableWhenTrigger,
   ) {
-    final rim = fromLinkId(qew.question!);
-    final shouldExist = qew.answerBoolean?.value ?? true;
+    final rim = fromLinkId(qew.question!.value ?? '');
+    final shouldExist = (qew.answerBoolean?.value ?? true) == true;
 
     // If enableWhen logic depends on an item that is disabled, the logic should
     // proceed as though the item is not valued - even if a default value or
@@ -643,11 +656,11 @@ class _EnableWhenTrigger {
 }
 
 class _QuestionnaireItemExpressionEvaluator extends ExpressionEvaluator {
-  late final Map<String, dynamic> questionnaireItemJson;
+  late final QuestionnaireItem questionnaireItem;
 
   @override
-  dynamic evaluate({int? generation}) {
-    final qi = questionnaireItemJson;
+  Future<dynamic> evaluate({int? generation}) async {
+    final qi = questionnaireItem;
 
     return [qi];
   }
@@ -655,6 +668,6 @@ class _QuestionnaireItemExpressionEvaluator extends ExpressionEvaluator {
   _QuestionnaireItemExpressionEvaluator(
     QuestionnaireItem questionnaireItem,
   ) : super('qitem', []) {
-    questionnaireItemJson = questionnaireItem.toJson();
+    this.questionnaireItem = questionnaireItem;
   }
 }

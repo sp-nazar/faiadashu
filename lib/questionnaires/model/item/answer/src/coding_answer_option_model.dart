@@ -58,7 +58,7 @@ class CodingAnswerOptionModel {
         ?.valueString;
 
     final optionPrefix = (plainOptionPrefix != null)
-        ? RenderingString.fromText(plainOptionPrefix)
+        ? RenderingString.fromText(plainOptionPrefix.value ?? '')
         : null;
 
     final ordinalValue = extensions
@@ -132,7 +132,7 @@ class CodingAnswerOptionModel {
         ?.valueString;
 
     final optionPrefix = (plainOptionPrefix != null)
-        ? RenderingString.fromText(plainOptionPrefix)
+        ? RenderingString.fromText(plainOptionPrefix.value ?? '')
         : null;
 
     RenderingString optionText;
@@ -164,7 +164,7 @@ class CodingAnswerOptionModel {
           '$qao specifies neither valueCode nor valueString.',
         );
       }
-      final plainText = valueString.value;
+      final plainText = valueString.value ?? '';
       final xhtmlExtensions = qao.valueString?.extension_;
       forDisplay = plainText;
       optionText = RenderingString.fromText(

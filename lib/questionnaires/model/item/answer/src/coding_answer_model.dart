@@ -103,7 +103,8 @@ class CodingAnswerModel extends AnswerModel<OptionsOrString, OptionsOrString> {
   Set<String>? toggleOption(String uid) {
     _logger.trace('Enter toggledValue $uid');
 
-    final repeatsValue = questionnaireItemModel.questionnaireItem.repeats?.value ?? false;
+    final repeatsValue =
+        questionnaireItemModel.questionnaireItem.repeats?.value == true;
     final isSingleChoiceExclusive = !repeatsValue;
     if (isSingleChoiceExclusive) {
       return {uid};
@@ -318,7 +319,8 @@ class CodingAnswerModel extends AnswerModel<OptionsOrString, OptionsOrString> {
 
     final int totalCount = selectedOptionsCount + openStringsCount;
 
-    final repeatsValue = questionnaireItemModel.questionnaireItem.repeats?.value ?? false;
+    final repeatsValue =
+        questionnaireItemModel.questionnaireItem.repeats?.value == true;
 
     if (!repeatsValue) {
       if (totalCount != 1) {

@@ -268,11 +268,12 @@ class QuestionnaireItemModel with Diagnosticable {
   /// The name of a section, the text of a question or text content for a display item.
   RenderingString? get text {
     final plainText = questionnaireItem.text?.value;
+    final textExtensions = questionnaireItem.text?.extension_;
 
     return (plainText != null)
         ? RenderingString.fromText(
             plainText,
-            extensions: questionnaireItem.textElement?.extension_,
+            extensions: textExtensions,
           )
         : null;
   }
@@ -285,11 +286,12 @@ class QuestionnaireItemModel with Diagnosticable {
   /// [FillerItemModel.prefix] can provide programmatically generated prefixes.
   RenderingString? get prefix {
     final plainPrefix = questionnaireItem.prefix?.value;
+    final prefixExtensions = questionnaireItem.prefix?.extension_;
 
     return (plainPrefix != null)
         ? RenderingString.fromText(
             plainPrefix,
-            extensions: questionnaireItem.prefixElement?.extension_,
+            extensions: prefixExtensions,
           )
         : null;
   }

@@ -37,17 +37,18 @@ class QuestionnaireScroller extends StatefulWidget {
   final void Function(QuestionnaireResponseModel?)?
       onQuestionnaireResponseChanged;
 
-  const QuestionnaireScroller({
+  QuestionnaireScroller({
     this.locale,
     required this.scaffoldBuilder,
     required this.fhirResourceProvider,
     required this.launchContext,
     this.aggregators,
     this.onLinkTap,
-    this.questionnaireModelDefaults = const QuestionnaireModelDefaults(),
+    QuestionnaireModelDefaults? questionnaireModelDefaults,
     this.onQuestionnaireResponseChanged,
     super.key,
-  });
+  }) : questionnaireModelDefaults =
+            questionnaireModelDefaults ?? QuestionnaireModelDefaults();
 
   @override
   State<StatefulWidget> createState() {

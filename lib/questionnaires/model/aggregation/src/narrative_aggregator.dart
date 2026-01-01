@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:faiadashu/coding/coding.dart';
 import 'package:faiadashu/l10n/l10n.dart';
 import 'package:faiadashu/logging/logging.dart';
@@ -205,8 +207,10 @@ class NarrativeAggregator extends Aggregator<Narrative> {
       return _narrative;
     }
     // Manually invoke the update, because the order matters and enableWhen calcs need to come after answer value updates.
-    questionnaireResponseModel.updateEnabledItems(
-      notifyListeners: false,
+    unawaited(
+      questionnaireResponseModel.updateEnabledItems(
+        notifyListeners: false,
+      ),
     ); // Setting this to true might result in endless refresh and stack overflow
     _narrative = _generateNarrative(questionnaireResponseModel);
     _generation = questionnaireResponseModel.generation;
