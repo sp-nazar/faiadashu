@@ -22,8 +22,10 @@ class StringAnswerModel extends AnswerModel<String, String> {
         ?.extensionOrNull('http://hl7.org/fhir/StructureDefinition/regex')
         ?.valueString;
 
-    regExp =
-        (regexPattern != null) ? RegExp(regexPattern, unicode: true) : null;
+    regExp = (regexPattern != null)
+        ? RegExp(regexPattern.value ?? regexPattern.valueString ?? '',
+            unicode: true)
+        : null;
 
     minLength = qi.extension_
             ?.extensionOrNull(

@@ -5,10 +5,10 @@ class ResourceExpressionEvaluator extends ExpressionEvaluator {
   final Resource? Function() resourceBuilder;
 
   @override
-  dynamic evaluate({int? generation}) {
-    final resource = resourceBuilder.call()?.toJson();
+  Future<dynamic> evaluate({int? generation}) async {
+    final resource = resourceBuilder.call();
 
-    return [resource];
+    return resource != null ? [resource] : <Resource>[];
   }
 
   ResourceExpressionEvaluator(

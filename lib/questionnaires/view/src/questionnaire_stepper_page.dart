@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 /// see [QuestionnaireStepper]
 /// see [QuestionnaireScrollerPage]
 class QuestionnaireStepperPage extends QuestionnaireStepper {
-  const QuestionnaireStepperPage({
+  QuestionnaireStepperPage({
     super.locale,
     required super.fhirResourceProvider,
     required super.launchContext,

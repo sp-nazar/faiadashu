@@ -80,21 +80,26 @@ class RenderingString with Diagnosticable {
         )
         ?.valueMarkdown;
 
+    final renderingXhtmlValue =
+        renderingXhtml?.value ?? renderingXhtml?.valueString;
+    final renderingStyleValue =
+        renderingStyle?.value ?? renderingStyle?.valueString;
+
     final escapedPlainText = _htmlEscape.convert(plainText);
 
     final outputXhtmlText = (xhtmlText != null)
         ? xhtmlText
-        : (renderingXhtml != null)
-            ? ((renderingStyle != null)
-                ? '<span style="${renderingStyle.value}">$renderingXhtml</span>'
-                : renderingXhtml)
+        : (renderingXhtmlValue != null)
+            ? ((renderingStyleValue != null)
+                ? '<span style="$renderingStyleValue">$renderingXhtmlValue</span>'
+                : renderingXhtmlValue)
             : (renderingMarkdown != null)
                 ? markdownToHtml(
                     renderingMarkdown.value ?? '',
                     extensionSet: ExtensionSet.gitHubFlavored,
                   )
-                : (renderingStyle != null)
-                    ? '<span style="$renderingStyle">$escapedPlainText</span>'
+                : (renderingStyleValue != null)
+                    ? '<span style="$renderingStyleValue">$escapedPlainText</span>'
                     : plainText;
 
     return RenderingString._(
@@ -104,9 +109,9 @@ class RenderingString with Diagnosticable {
           renderingStyle == null &&
           renderingXhtml == null &&
           renderingMarkdown == null,
-      renderingStyle: renderingStyle?.value,
-      renderingXhtml: renderingXhtml?.value,
-      renderingMarkdown: renderingMarkdown?.value,
+      renderingStyle: renderingStyleValue,
+      renderingXhtml: renderingXhtmlValue,
+      renderingMarkdown: renderingMarkdown,
     );
   }
 

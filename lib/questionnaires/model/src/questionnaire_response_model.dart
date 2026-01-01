@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
@@ -160,16 +161,18 @@ class QuestionnaireResponseModel {
     List<Aggregator>? aggregators,
     required FhirResourceProvider fhirResourceProvider,
     required LaunchContext launchContext,
-    QuestionnaireModelDefaults questionnaireModelDefaults =
-        const QuestionnaireModelDefaults(),
+    QuestionnaireModelDefaults? questionnaireModelDefaults,
   }) async {
     _logger.debug('QuestionnaireModel.fromFhirResourceBundle');
 
     await fhirResourceProvider.init();
 
+    final resolvedDefaults =
+        questionnaireModelDefaults ?? QuestionnaireModelDefaults();
+
     final questionnaireModel = await QuestionnaireModel.fromFhirResourceBundle(
       fhirResourceProvider: fhirResourceProvider,
-      questionnaireModelDefaults: questionnaireModelDefaults,
+      questionnaireModelDefaults: resolvedDefaults,
     );
 
     final questionnaireResponseModel = QuestionnaireResponseModel._(
@@ -216,11 +219,11 @@ class QuestionnaireResponseModel {
 
     // Populate initial values if response == null
     if (response == null) {
-      questionnaireResponseModel
-          .orderedQuestionItemModels()
-          .forEach((qim) {
-        qim.populateInitialValue();
-      });
+      await Future.wait(
+        questionnaireResponseModel.orderedQuestionItemModels().map(
+              (qim) => qim.populateInitialValue(),
+            ),
+      );
     } else {
       questionnaireResponseModel.populate(response);
     }
@@ -236,12 +239,13 @@ class QuestionnaireResponseModel {
     }
 
     // Set up calculatedExpressions on items
-    questionnaireResponseModel._updateCalculations();
-    questionnaireResponseModel.valueChangeNotifier
-        .addListener(questionnaireResponseModel._updateCalculations);
+    await questionnaireResponseModel._updateCalculations();
+    questionnaireResponseModel.valueChangeNotifier.addListener(
+      () => unawaited(questionnaireResponseModel._updateCalculations()),
+    );
 
     // Set up dynamic enableWhen behavior on items
-    questionnaireResponseModel._activateEnablement();
+    await questionnaireResponseModel._activateEnablement();
 
     // Calculate visibility for every item
     for (final fillerItemModel
@@ -429,12 +433,20 @@ class QuestionnaireResponseModel {
 
   Map<String, dynamic>? _cachedQuestionnaireResponse;
 
-  /// INTERNAL ONLY - Returns a FHIR JSON fragment for a node with a given [uid].
-  Map<String, dynamic>? fhirResponseItemByUid(String uid) {
+  /// INTERNAL ONLY - Returns a FHIR fragment for a node with a given [uid].
+  FhirBase? fhirResponseItemByUid(String uid) {
     _cachedQuestionnaireResponse ??=
         aggregator<QuestionnaireResponseAggregator>().aggregateResponseItems();
 
-    return _cachedQuestionnaireResponse?[uid] as Map<String, dynamic>?;
+    final cachedItem = _cachedQuestionnaireResponse?[uid];
+
+    if (cachedItem is FhirBase) {
+      return cachedItem;
+    } else if (cachedItem is Map<String, dynamic>) {
+      return QuestionnaireResponseItem.fromJson(cachedItem);
+    } else {
+      return null;
+    }
   }
 
   /// Returns a FHIR [QuestionnaireResponse] for use with FHIRPath.
@@ -482,10 +494,10 @@ class QuestionnaireResponseModel {
     }
 
     for (final item in questionnaireResponseItems) {
-      final linkId = item.linkId!.value;
+      final linkId = item.linkId?.value ?? '';
       final qim = questionnaireModel.fromLinkId(linkId);
       final rim = responseItemModels.firstWhereOrNull(
-        (rim) => rim.questionnaireItemModel.linkId?.value == linkId,
+        (rim) => rim.questionnaireItemModel.linkId == linkId,
       );
       if (qim.isGroup) {
         if (rim != null) {
@@ -601,20 +613,24 @@ class QuestionnaireResponseModel {
     responseStatus = questionnaireResponse.status ?? FhirCode('in-progress');
   }
 
-  void _updateCalculations() {
-    orderedResponseItemModels()
+  Future<void> _updateCalculations() async {
+    final calculationFutures = orderedResponseItemModels()
         .where((rim) => rim.questionnaireItemModel.isCalculatedExpression)
-        .forEach((rim) {
+        .map((rim) {
       if (rim is QuestionItemModel) {
-        rim.updateCalculatedExpression();
+        return rim.updateCalculatedExpression();
       }
+
+      return Future<void>.value();
     });
+
+    await Future.wait(calculationFutures);
   }
 
   /// Update the current enablement status of all items.
   ///
   /// This updates enablement through enableWhen and enableWhenExpression.
-  void updateEnabledItems({bool notifyListeners = true}) {
+  Future<void> updateEnabledItems({bool notifyListeners = true}) async {
     _logger.trace('updateEnabledItems()');
 
     if (_updateEnabledGeneration == _generation) {
@@ -643,7 +659,7 @@ class QuestionnaireResponseModel {
     for (final fim in orderedFillerItemModels().where(
       (fim) => fim.isDynamicallyEnabled,
     )) {
-      fim.updateEnabled();
+      await fim.updateEnabled();
     }
 
     // Go over all items, since the previous loop would not catch
@@ -671,10 +687,10 @@ class QuestionnaireResponseModel {
   /// questionnaire response status
   ///
   /// Idempotent: Will only execute once during the lifetime of this model.
-  void _activateEnablement() {
+  Future<void> _activateEnablement() async {
     if (!_visibilityActivated) {
       // Initial calculation of all enablement.
-      updateEnabledItems();
+      await updateEnabledItems();
 
       final hasEnabledWhenExpressions = orderedFillerItemModels()
           .any((fim) => fim.questionnaireItemModel.hasEnabledWhenExpression);
@@ -684,7 +700,9 @@ class QuestionnaireResponseModel {
         // non-static item as we have no way to
         // find out which items are referenced by the FHIRPath expression.
         for (final itemModel in orderedResponseItemModels()) {
-          itemModel.addListener(() => updateEnabledItems());
+          itemModel.addListener(
+            () => unawaited(updateEnabledItems()),
+          );
         }
       } else {
         // Activate enable behavior on individual items with surgical precision
@@ -844,14 +862,14 @@ class QuestionnaireResponseModel {
   ///
   /// Returns null, if everything is complete.
   /// Returns a map (UID -> error text) with incomplete entries, if items are incomplete.
-  Map<String, String>? validate({
+  Future<Map<String, String>?> validate({
     bool updateErrorText = true,
     bool notifyListeners = false,
-  }) {
+  }) async {
     final invalidMap = <String, String>{};
 
     for (final itemModel in orderedResponseItemModels()) {
-      final errorTexts = itemModel.validate(
+      final errorTexts = await itemModel.validate(
         updateErrorText: updateErrorText,
         notifyListeners: notifyListeners,
       );

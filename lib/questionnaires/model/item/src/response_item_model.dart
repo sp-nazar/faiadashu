@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:faiadashu/l10n/l10n.dart';
 import 'package:faiadashu/logging/logging.dart';
 import 'package:faiadashu/questionnaires/model/model.dart';
@@ -23,7 +25,7 @@ abstract class ResponseItemModel extends FillerItemModel {
             () => questionnaireResponseModel
                 .createQuestionnaireResponseForFhirPath(),
             FhirExpression(
-              expression: constraintExpression,
+              expression: constraintExpression.toFhirString,
               language: ExpressionLanguage.textFhirpath,
             ),
             [
@@ -50,10 +52,10 @@ abstract class ResponseItemModel extends FillerItemModel {
   /// Localized text if an error exists. Or null if no error exists.
   String? errorText;
 
-  Map<String, String>? validate({
+  Future<Map<String, String>?> validate({
     bool updateErrorText = true,
     bool notifyListeners = false,
-  }) {
+  }) async {
     String? newErrorText;
 
     if (questionnaireItemModel.isRequired && isUnanswered) {
@@ -61,7 +63,7 @@ abstract class ResponseItemModel extends FillerItemModel {
           .validatorRequiredItem;
     }
 
-    final constraintError = validateConstraint();
+    final constraintError = await validateConstraint();
     newErrorText ??= constraintError;
 
     if (errorText != newErrorText) {
@@ -87,13 +89,13 @@ abstract class ResponseItemModel extends FillerItemModel {
   ///
   /// Returns null if satisfied, or a human-readable text if not satisfied.
   /// Returns null if no constraint is specified.
-  String? validateConstraint() {
+  Future<String?> validateConstraint() async {
     final constraintExpression = _constraintExpression;
     if (constraintExpression == null) {
       return null;
     }
 
-    final isSatisfied = constraintExpression.fetchBoolValue(
+    final isSatisfied = await constraintExpression.fetchBoolValue(
       unknownValue: true,
       generation: questionnaireResponseModel.generation,
       location: nodeUid,

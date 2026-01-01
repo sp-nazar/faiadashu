@@ -24,13 +24,13 @@ class _QuestionnaireCompleteButtonState
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
-      onPressed: () {
+      onPressed: () async {
         final qf = QuestionnaireResponseFiller.of(context);
         final qrm = qf.questionnaireResponseModel;
         final currentResponseStatus = qrm.responseStatus;
 
-        if (currentResponseStatus != 'completed') {
-          final incompleteItems = qrm.validate(notifyListeners: true);
+        if (currentResponseStatus.valueString != 'completed') {
+          final incompleteItems = await qrm.validate(notifyListeners: true);
           qrm.invalidityNotifier.value = incompleteItems;
 
           if (incompleteItems != null) {
@@ -38,7 +38,8 @@ class _QuestionnaireCompleteButtonState
           }
         }
 
-        final newResponseStatus = (currentResponseStatus == 'completed')
+        final newResponseStatus =
+            (currentResponseStatus.valueString == 'completed')
             ? FhirCode('in-progress')
             : FhirCode('completed');
 
@@ -52,13 +53,15 @@ class _QuestionnaireCompleteButtonState
       },
       icon: (QuestionnaireResponseFiller.of(context)
                   .questionnaireResponseModel
-                  .responseStatus !=
+                  .responseStatus
+                  .valueString !=
               'completed')
           ? const Icon(Icons.check_circle)
           : const Icon(Icons.edit),
       label: (QuestionnaireResponseFiller.of(context)
                   .questionnaireResponseModel
-                  .responseStatus !=
+                  .responseStatus
+                  .valueString !=
               'completed')
           ? Text(
               FDashLocalizations.of(context)

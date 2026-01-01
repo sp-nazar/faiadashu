@@ -31,8 +31,10 @@ class DateTimeAnswerModel extends AnswerModel<FhirDateTime, FhirDateTime> {
     }
 
     if (itemType.value == 'date') {
+      final dateValue = value?.valueDateTime ?? value?.value;
       return QuestionnaireResponseAnswer(
-        valueDate: FhirDate.fromDateTime(value.value!),
+        valueDate:
+            dateValue is DateTime ? FhirDate.fromDateTime(dateValue) : null,
         item: items,
       );
     } else if (itemType.value == 'datetime') {
@@ -41,9 +43,12 @@ class DateTimeAnswerModel extends AnswerModel<FhirDateTime, FhirDateTime> {
         item: items,
       );
     } else if (itemType.value == 'time') {
+      final timeValue = value?.valueDateTime ?? value?.value;
       return QuestionnaireResponseAnswer(
         valueTime: FhirTime(
-          value.value.toIso8601String().substring('yyyy-MM-ddT'.length),
+          timeValue is DateTime
+              ? timeValue.toIso8601String().substring('yyyy-MM-ddT'.length)
+              : '',
         ),
         item: items,
       );
@@ -75,12 +80,23 @@ class DateTimeAnswerModel extends AnswerModel<FhirDateTime, FhirDateTime> {
       return;
     }
 
-    value = FhirDateTime.fromDateTime(evaluationResult);
+    if (evaluationResult is FhirDateTime) {
+      value = evaluationResult;
+    } else if (evaluationResult is FhirDate) {
+      value = FhirDateTime.fromDateTime(
+        evaluationResult.valueDateTime ?? DateTime.now(),
+      );
+    } else if (evaluationResult is DateTime) {
+      value = FhirDateTime.fromDateTime(evaluationResult);
+    } else if (evaluationResult is String) {
+      value = FhirDateTime.fromString(evaluationResult);
+    }
   }
 
   @override
   void populate(QuestionnaireResponseAnswer answer) {
+    final dateValue = answer.valueDate?.valueDateTime;
     value = answer.valueDateTime ??
-        ((answer.valueDate != null) ? FhirDateTime.fromDateTime(answer.valueDate!.value!) : null);
+        (dateValue != null ? FhirDateTime.fromDateTime(dateValue) : null);
   }
 }

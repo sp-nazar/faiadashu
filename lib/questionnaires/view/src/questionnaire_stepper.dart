@@ -12,14 +12,15 @@ class QuestionnaireStepper extends StatefulWidget {
   final QuestionnairePageScaffoldBuilder scaffoldBuilder;
   final QuestionnaireModelDefaults questionnaireModelDefaults;
 
-  const QuestionnaireStepper({
+  QuestionnaireStepper({
     this.locale,
     required this.scaffoldBuilder,
     required this.fhirResourceProvider,
     required this.launchContext,
-    this.questionnaireModelDefaults = const QuestionnaireModelDefaults(),
+    QuestionnaireModelDefaults? questionnaireModelDefaults,
     super.key,
-  });
+  }) : questionnaireModelDefaults =
+            questionnaireModelDefaults ?? QuestionnaireModelDefaults();
 
   @override
   State<StatefulWidget> createState() => QuestionnaireStepperState();

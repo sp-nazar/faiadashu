@@ -21,7 +21,7 @@ class ItemMediaModel {
     final attachmentTitle = attachment.title;
 
     final altTagContent = attachmentTitle != null
-        ? _htmlEscape.convert(attachmentTitle)
+        ? _htmlEscape.convert(attachmentTitle.valueString ?? '')
         : altText != null
             ? _htmlEscape.convert(altText.plainText)
             : '';

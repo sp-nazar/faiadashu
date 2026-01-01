@@ -15,7 +15,7 @@ class QuestionnaireScrollerPage extends StatelessWidget {
   final void Function(BuildContext context, Uri url)? onLinkTap;
   final QuestionnaireModelDefaults questionnaireModelDefaults;
 
-  const QuestionnaireScrollerPage({
+  QuestionnaireScrollerPage({
     this.locale,
     required this.fhirResourceProvider,
     required this.launchContext,
@@ -23,9 +23,10 @@ class QuestionnaireScrollerPage extends StatelessWidget {
     this.persistentFooterButtons,
     this.aggregators,
     this.onLinkTap,
-    this.questionnaireModelDefaults = const QuestionnaireModelDefaults(),
+    QuestionnaireModelDefaults? questionnaireModelDefaults,
     super.key,
-  });
+  }) : questionnaireModelDefaults =
+            questionnaireModelDefaults ?? QuestionnaireModelDefaults();
 
   @override
   Widget build(BuildContext context) {

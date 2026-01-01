@@ -71,15 +71,15 @@ class QuestionnaireResponseAggregator
     }
 
     final responseItem = QuestionnaireResponseItem(
-      linkId: itemModel.questionnaireItemModel.linkId ?? FhirString(''),
+      linkId: (itemModel.questionnaireItemModel.linkId ?? '')
+          .toFhirString,
       text: itemModel.questionnaireItemModel.text?.plainText?.toFhirString,
       // TODO: Include textElement
       extension_: (dataAbsentReason != null)
           ? [
               FhirExtension(
-                url: FhirString(
-                  dataAbsentReasonExtensionUrl.valueString ?? '',
-                ),
+                url: dataAbsentReasonExtensionUrl.valueString?.toFhirString ??
+                    FhirString(''),
                 valueCode: dataAbsentReason,
               ),
             ]
@@ -87,7 +87,7 @@ class QuestionnaireResponseAggregator
       answer: answers,
     );
 
-    responseItemRegistry[itemModel.nodeUid] = responseItem.toJson();
+    responseItemRegistry[itemModel.nodeUid] = responseItem;
 
     return responseItem;
   }
@@ -106,13 +106,14 @@ class QuestionnaireResponseAggregator
 
     if (nestedItems != null) {
       final responseItem = QuestionnaireResponseItem(
-        linkId: itemModel.questionnaireItemModel.linkId ?? FhirString(''),
+        linkId: (itemModel.questionnaireItemModel.linkId ?? '')
+            .toFhirString,
         text: itemModel.questionnaireItemModel.text?.plainText?.toFhirString,
         // TODO: include textElement
         item: nestedItems,
       );
 
-      responseItemRegistry[itemModel.nodeUid] = responseItem.toJson();
+      responseItemRegistry[itemModel.nodeUid] = responseItem;
 
       return responseItem;
     } else {
@@ -205,9 +206,6 @@ class QuestionnaireResponseAggregator
             "$questionnaireUrl${(questionnaireVersion != null) ? '|$questionnaireVersion' : ''}",
           )
         : null;
-
-    final questionnaireTitle =
-        questionnaireResponseModel.questionnaireModel.questionnaire.title;
 
     final contained = <Resource>[];
 

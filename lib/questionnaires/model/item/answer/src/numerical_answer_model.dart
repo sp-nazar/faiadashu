@@ -50,8 +50,10 @@ class NumericalAnswerModel extends AnswerModel<String, Quantity> {
   }
 
   String keyForUnitChoice(Coding coding) {
-    final choiceString =
-        (coding.code != null) ? coding.code?.value : coding.display;
+    final choiceString = coding.code?.value ??
+        coding.code?.valueString ??
+        coding.display?.value ??
+        coding.display?.valueString;
 
     if (choiceString == null) {
       throw QuestionnaireFormatException(
@@ -95,7 +97,8 @@ class NumericalAnswerModel extends AnswerModel<String, Quantity> {
       final sliderStepValueExtension = qi.extension_?.extensionOrNull(
         'http://hl7.org/fhir/StructureDefinition/questionnaire-sliderStepValue',
       );
-      _sliderStepValue = sliderStepValueExtension?.valueDecimal?.value ??
+      _sliderStepValue = sliderStepValueExtension?.valueDecimal?.value
+              ?.toDouble() ??
           sliderStepValueExtension?.valueInteger?.value?.toDouble();
       _sliderDivisions = (_sliderStepValue != null)
           ? ((_maxValue - _minValue) / _sliderStepValue!).round()
@@ -273,7 +276,8 @@ class NumericalAnswerModel extends AnswerModel<String, Quantity> {
     final dataAbsentReasonExtension = !valid
         ? [
             FhirExtension(
-              url: dataAbsentReasonExtensionUrl,
+              url: dataAbsentReasonExtensionUrl.valueString?.toFhirString ??
+                  FhirString(''),
               valueCode: dataAbsentReasonAsTextCode,
             ),
           ]
