@@ -28,6 +28,14 @@ Build beautiful healthcare apps fast — use the Flutter™ SDK and follow the H
 ### Display formatted, localized observations
 ![Screenshot](https://user-images.githubusercontent.com/16414047/112978818-12977f00-9158-11eb-8e1c-6772dcc3270a.png)
 
+### Example app
+An end-to-end Flutter example that loads the PHQ-4 questionnaire from an asset and renders it with `QuestionnaireScrollerPage` lives in [`example/`](example/). Run it with:
+```
+cd example
+flutter pub get
+flutter run -d <device_id>
+```
+
 
 ### Development overview
 [Development Overview](doc/overview.md) - Learn how to use the Faidashu FHIRDash library in your own projects.
@@ -60,4 +68,3 @@ provided information and decide whether you meet the obligations to use this lib
 **This information is not a substitute for professional legal advice.**
 
 ---------------------------------------
-
