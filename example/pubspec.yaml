@@ -1,0 +1,27 @@
+name: questionnaire_display_example
+description: Example Flutter app showing how to render a FHIR Questionnaire with Faiadashu.
+publish_to: 'none'
+version: 1.0.0
+
+environment:
+  sdk: '>=2.18.4 <4.0.0'
+  flutter: '>=3.0.0'
+
+dependencies:
+  faiadashu:
+    path: ..
+  fhir_r4: ^0.4.3
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/questionnaires/phq-4.json
