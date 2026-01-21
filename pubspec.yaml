@@ -29,7 +29,7 @@ dependencies:
   fhir:
     git:
       url: https://github.com/sp-nazar/fhir.git
-      ref: v0.12.0
+      ref: 0.12.0
   fhir_path:
     git:
       url: https://github.com/sp-nazar/fhir_path.git
