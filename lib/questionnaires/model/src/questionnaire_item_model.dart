@@ -188,7 +188,7 @@ class QuestionnaireItemModel with Diagnosticable {
 
   bool get isCodingType {
     return questionnaireItem.type == FhirCode('choice') ||
-        questionnaireItem.type == FhirCode('open_choice');
+        questionnaireItem.type == FhirCode('open-choice');
   }
 
   /// Is this item not changeable by end-users?

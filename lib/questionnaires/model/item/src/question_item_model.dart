@@ -351,7 +351,7 @@ class QuestionItemModel extends ResponseItemModel {
             firstAnswerModel.populateFromExpression(initialValue.valueBoolean);
             break;
           case 'choice':
-          case 'open_choice':
+          case 'open-choice':
             final initialCodings = initialValues
                 .where((qiv) => qiv.valueCoding != null)
                 .map<Coding>((qiv) => qiv.valueCoding!);
