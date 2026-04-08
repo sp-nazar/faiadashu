@@ -276,11 +276,11 @@ class QuestionItemModel extends ResponseItemModel {
 
   /// Creates a new [AnswerModel] of the type for this question.
   AnswerModel _createAnswerModel() {
-    late AnswerModel answerModel;
+    AnswerModel answerModel = UnsupportedAnswerModel(this);
 
     switch (questionnaireItemModel.questionnaireItem.type.value) {
       case 'choice':
-      case 'open_choice':
+      case 'open-choice':
         answerModel = CodingAnswerModel(this);
         break;
       case 'quantity':
