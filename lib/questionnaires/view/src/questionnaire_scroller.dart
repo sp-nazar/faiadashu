@@ -37,6 +37,8 @@ class QuestionnaireScroller extends StatefulWidget {
   final void Function(QuestionnaireResponseModel?)?
       onQuestionnaireResponseChanged;
 
+  final EdgeInsets padding;
+
   const QuestionnaireScroller({
     this.locale,
     required this.scaffoldBuilder,
@@ -46,6 +48,7 @@ class QuestionnaireScroller extends StatefulWidget {
     this.onLinkTap,
     this.questionnaireModelDefaults = const QuestionnaireModelDefaults(),
     this.onQuestionnaireResponseChanged,
+    this.padding = const EdgeInsets.all(8),
     super.key,
   });
 
@@ -180,32 +183,28 @@ class _QuestionnaireScrollerState extends State<QuestionnaireScroller> {
             },
             child: LayoutBuilder(
               builder: (context, constraints) {
-                const edgeInsets = 8.0;
-                const twice = 2;
-
                 return ScrollablePositionedList.builder(
                   itemScrollController: _listScrollController,
                   itemPositionsListener: _itemPositionsListener,
                   itemCount: totalLength,
-                  padding: const EdgeInsets.all(edgeInsets),
-                  minCacheExtent: 200, // Allow tabbing to prev/next items
+                  padding: widget.padding,
+                  minCacheExtent: 200,
+                  // Allow tabbing to prev/next items
                   itemBuilder: (BuildContext context, int i) {
-                    return Row(
-                      children: [
-                        Container(
-                          constraints: BoxConstraints(
-                            maxWidth: QuestionnaireTheme.of(context)
-                                .maxItemWidth
-                                .clamp(
-                                  constraints.minWidth,
-                                  constraints.maxWidth - twice * edgeInsets,
-                                ),
-                          ),
-                          child: QuestionnaireResponseFiller.of(context)
-                              .itemFillerAt(i),
+                    return Align(
+                      alignment: Alignment.topCenter,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth:
+                              QuestionnaireTheme.of(context).maxItemWidth.clamp(
+                                    constraints.minWidth,
+                                    constraints.maxWidth -
+                                        widget.padding.horizontal,
+                                  ),
                         ),
-                        const Spacer(),
-                      ],
+                        child: QuestionnaireResponseFiller.of(context)
+                            .itemFillerAt(i),
+                      ),
                     );
                   },
                 );
