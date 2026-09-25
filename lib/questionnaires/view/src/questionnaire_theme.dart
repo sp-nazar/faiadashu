@@ -1,6 +1,8 @@
 import 'package:faiadashu/l10n/l10n.dart';
 import 'package:faiadashu/logging/logging.dart';
+import 'package:faiadashu/questionnaires/model/item/answer/src/attachment_answer_model.dart';
 import 'package:faiadashu/questionnaires/questionnaires.dart';
+import 'package:faiadashu/questionnaires/view/item/answer/src/attachment_answer_filler.dart';
 import 'package:flutter/material.dart';
 
 /// Should coding selections be presented in a compact or an expanded format?
@@ -154,6 +156,12 @@ class QuestionnaireThemeData {
         return CodingAnswerFiller(answerModel, key: key);
       } else if (answerModel is BooleanAnswerModel) {
         return BooleanAnswerFiller(answerModel, key: key);
+      } else if (answerModel is AttachmentAnswerModel) {
+        return AttachmentAnswerFiller(
+          answerModel,
+          key: key,
+          pickAttachment: (context, currentValue) async {},
+        );
       } else if (answerModel is UnsupportedAnswerModel) {
         throw QuestionnaireFormatException(
           'Unsupported item type: ${answerModel.qi.type}',

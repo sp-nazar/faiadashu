@@ -306,6 +306,8 @@ class QuestionItemModel extends ResponseItemModel {
       case 'group':
         throw UnsupportedError("Items of type 'group' do not have answers.");
       case 'attachment':
+        answerModel = AttachmentAnswerModel(this);
+        break;
       case 'unknown':
       case 'reference':
         // Throwing an exception here would lead to breakage of filler.
