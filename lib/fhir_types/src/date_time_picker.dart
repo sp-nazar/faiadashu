@@ -95,20 +95,19 @@ class _FhirDateTimePickerState extends State<FhirDateTimePicker> {
         return; // Cancelled, don't touch anything
       }
 
+      final dateOnly = widget.pickerType == FhirDate;
+
       dateTime = DateTime(
         dateTime.year,
         dateTime.month,
         dateTime.day,
-        time.hour,
-        time.minute,
+        dateOnly ? 0 : time.hour,
+        dateOnly ? 0 : time.minute,
       );
     }
 
     final fhirDateTime = FhirDateTime(
       dateTime,
-      (widget.pickerType == FhirDate)
-          ? DateTimePrecision.yyyy_MM_dd
-          : DateTimePrecision.yyyy_MM_dd_T_HH_mm_ss_SSSZZ,
     );
     setState(() {
       _dateTimeFieldController.text = (widget.pickerType == FhirTime)

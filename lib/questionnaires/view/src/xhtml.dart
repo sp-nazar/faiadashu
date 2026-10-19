@@ -22,14 +22,18 @@ class Xhtml extends StatelessWidget {
     BuildContext context,
     String plainText, {
     List<FhirExtension>? extensions,
+    Locale? locale,
     QuestionnaireModel? questionnaireModel,
     double? imageWidth,
     double? imageHeight,
     TextStyle? defaultTextStyle,
     Key? key,
   }) {
-    final xhtmlString =
-        RenderingString.fromText(plainText, extensions: extensions);
+    final xhtmlString = RenderingString.fromText(
+      plainText,
+      extensions: extensions,
+      locale: locale ?? Localizations.localeOf(context),
+    );
 
     return Xhtml.fromRenderingString(
       context,

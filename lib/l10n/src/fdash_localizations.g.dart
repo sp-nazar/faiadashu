@@ -14,6 +14,8 @@ import 'fdash_localizations_fr.g.dart';
 import 'fdash_localizations_it.g.dart';
 import 'fdash_localizations_ja.g.dart';
 
+// ignore_for_file: type=lint
+
 /// Callers can lookup localized strings with an instance of FDashLocalizations
 /// returned by `FDashLocalizations.of(context)`.
 ///

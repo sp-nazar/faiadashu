@@ -154,14 +154,17 @@ class CodingAnswerModel extends AnswerModel<OptionsOrString, OptionsOrString> {
 
   bool get isOptionsOrString => qi.type.value == 'open-choice';
 
-  RenderingString get openLabel => RenderingString.fromText(
-        qi.extension_
-                ?.extensionOrNull(
-                  'http://hl7.org/fhir/uv/sdc/StructureDefinition/questionnaire-sdc-openLabel',
-                )
-                ?.valueString ??
-            lookupFDashLocalizations(locale).fillerOpenCodingOtherLabel,
-      );
+  RenderingString get openLabel {
+    final labelExtension = qi.extension_?.extensionOrNull(
+      'http://hl7.org/fhir/uv/sdc/StructureDefinition/questionnaire-sdc-openLabel',
+    );
+    return RenderingString.fromText(
+      labelExtension?.valueString ??
+          lookupFDashLocalizations(locale).fillerOpenCodingOtherLabel,
+      extensions: labelExtension?.valueStringElement?.extension_,
+      locale: locale,
+    );
+  }
 
   String _nextOptionUid() => _answerOptions.length.toString();
 

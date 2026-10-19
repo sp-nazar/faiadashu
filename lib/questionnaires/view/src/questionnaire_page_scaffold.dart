@@ -61,7 +61,8 @@ class DefaultQuestionnairePageScaffoldBuilder
             SizedBox(
               width: MediaQuery.of(context).size.width - 200,
               child: Text(
-                questionnaire.title ??
+                questionnaireFiller.questionnaireResponseModel
+                        .questionnaireModel.title?.plainText ??
                     FDashLocalizations.of(context).questionnaireGenericTitle,
                 maxLines: 2,
                 softWrap: true,

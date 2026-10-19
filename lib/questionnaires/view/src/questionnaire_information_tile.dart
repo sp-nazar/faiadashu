@@ -8,7 +8,12 @@ import 'package:flutter/material.dart';
 /// Contains information such as title and publisher.
 class QuestionnaireInformationTile extends StatelessWidget {
   final Questionnaire questionnaire;
-  const QuestionnaireInformationTile(this.questionnaire, {super.key});
+  final Locale? locale;
+  const QuestionnaireInformationTile(
+    this.questionnaire, {
+    super.key,
+    this.locale,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +26,7 @@ class QuestionnaireInformationTile extends StatelessWidget {
           questionnaire.title ??
               FDashLocalizations.of(context).questionnaireUnknownTitle,
           extensions: questionnaire.titleElement?.extension_,
+          locale: locale,
           defaultTextStyle: defaultTextStyle,
         ),
         const Divider(),
@@ -29,6 +35,7 @@ class QuestionnaireInformationTile extends StatelessWidget {
           questionnaire.publisher ??
               FDashLocalizations.of(context).questionnaireUnknownPublisher,
           extensions: questionnaire.publisherElement?.extension_,
+          locale: locale,
           defaultTextStyle: defaultTextStyle,
         ),
       ],

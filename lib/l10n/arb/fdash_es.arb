@@ -44,5 +44,6 @@
     "narrativePageTitle": "Narrativa",
     "questionnaireGenericTitle": "Encuesta",
     "questionnaireUnknownTitle": "Sin título",
-    "questionnaireUnknownPublisher": "Editor desconocido"
+    "questionnaireUnknownPublisher": "Editor desconocido",
+    "fillerOpenCodingOtherLabel": "Otro"
 }

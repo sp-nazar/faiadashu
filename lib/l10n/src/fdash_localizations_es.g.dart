@@ -1,8 +1,10 @@
 // ignore_for_file: avoid_escaping_inner_quotes, unnecessary_brace_in_string_interps, unnecessary_string_escapes, always_use_package_imports
 
+// ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'fdash_localizations.g.dart';
+
+// ignore_for_file: type=lint
 
 /// The translations for Spanish Castilian (`es`).
 class FDashLocalizationsEs extends FDashLocalizations {
@@ -172,7 +174,7 @@ class FDashLocalizationsEs extends FDashLocalizations {
   String get aggregationTotalScoreTitle => 'Total Score';
 
   @override
-  String get fillerOpenCodingOtherLabel => 'Other';
+  String get fillerOpenCodingOtherLabel => 'Otro';
 
   @override
   String fillerAddAnotherItemLabel(Object itemLabel) {

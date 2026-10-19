@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:faiadashu/fhir_types/fhir_types.dart';
 import 'package:fhir/r4.dart';
@@ -60,6 +61,7 @@ class RenderingString with Diagnosticable {
   factory RenderingString.fromText(
     String plainText, {
     List<FhirExtension>? extensions,
+    Locale? locale,
     String? xhtmlText,
   }) {
     final renderingXhtml = extensions
@@ -80,33 +82,40 @@ class RenderingString with Diagnosticable {
         )
         ?.valueMarkdown;
 
-    final escapedPlainText = _htmlEscape.convert(plainText);
+    final resolvedText = locale == null
+        ? plainText
+        : localizedFhirText(plainText, extensions, locale);
+    // Rendering markup for the original language should not overwrite a
+    // translated string. Keep rendering-style when it applies.
+    final resolvedXhtml = resolvedText == plainText ? renderingXhtml : null;
+    final resolvedMarkdown = resolvedText == plainText ? renderingMarkdown : null;
+    final escapedPlainText = _htmlEscape.convert(resolvedText);
 
     final outputXhtmlText = (xhtmlText != null)
         ? xhtmlText
-        : (renderingXhtml != null)
+        : (resolvedXhtml != null)
             ? ((renderingStyle != null)
-                ? '<span style="$renderingStyle">$renderingXhtml</span>'
-                : renderingXhtml)
-            : (renderingMarkdown != null)
+                ? '<span style="$renderingStyle">$resolvedXhtml</span>'
+                : resolvedXhtml)
+            : (resolvedMarkdown != null)
                 ? markdownToHtml(
-                    renderingMarkdown.value ?? '',
+                    resolvedMarkdown.value ?? '',
                     extensionSet: ExtensionSet.gitHubFlavored,
                   )
                 : (renderingStyle != null)
                     ? '<span style="$renderingStyle">$escapedPlainText</span>'
-                    : plainText;
+                    : resolvedText;
 
     return RenderingString._(
-      plainText,
+      resolvedText,
       outputXhtmlText,
       xhtmlText == null &&
           renderingStyle == null &&
-          renderingXhtml == null &&
-          renderingMarkdown == null,
+          resolvedXhtml == null &&
+          resolvedMarkdown == null,
       renderingStyle: renderingStyle,
-      renderingXhtml: renderingXhtml,
-      renderingMarkdown: renderingMarkdown,
+      renderingXhtml: resolvedXhtml,
+      renderingMarkdown: resolvedMarkdown,
     );
   }
 

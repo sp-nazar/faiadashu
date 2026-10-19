@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:faiadashu/fhir_types/fhir_types.dart';
 import 'package:faiadashu/logging/logging.dart';
 import 'package:faiadashu/questionnaires/questionnaires.dart';
@@ -39,6 +41,9 @@ class QuestionnaireModel {
   /// The FHIR [Questionnaire]
   final Questionnaire questionnaire;
 
+  /// Locale used for rendering translated FHIR primitive text.
+  final Locale? locale;
+
   // OPTIMIZE: Can I get rid of _cachedItems because of _orderedItems?
   // Careful: _buildOrderedItems uses both to ensure the proper order of items!
 
@@ -58,6 +63,7 @@ class QuestionnaireModel {
 
   QuestionnaireModel._({
     required this.questionnaire,
+    required this.locale,
     required this.fhirResourceProvider,
     required this.questionnaireModelDefaults,
   }) {
@@ -77,6 +83,7 @@ class QuestionnaireModel {
   /// The [fhirResourceProvider] is used for access to any required resources,
   /// such as ValueSets.
   static Future<QuestionnaireModel> fromFhirResourceBundle({
+    Locale? locale,
     required FhirResourceProvider fhirResourceProvider,
     required QuestionnaireModelDefaults questionnaireModelDefaults,
   }) async {
@@ -91,6 +98,7 @@ class QuestionnaireModel {
 
     final questionnaireModel = QuestionnaireModel._(
       questionnaire: questionnaire,
+      locale: locale,
       fhirResourceProvider: fhirResourceProvider,
       questionnaireModelDefaults: questionnaireModelDefaults,
     );
@@ -107,6 +115,7 @@ class QuestionnaireModel {
         ? RenderingString.fromText(
             plainTitle,
             extensions: questionnaire.titleElement?.extension_,
+            locale: locale,
           )
         : null;
   }
