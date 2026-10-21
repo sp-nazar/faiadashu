@@ -18,61 +18,67 @@ extension FDashTimeExtension on FhirTime {
 }
 
 extension FDashDateExtension on FhirDate {
-  String format(Locale locale, {String defaultText = ''}) {
+  String format(
+    Locale locale, {
+    String defaultText = '',
+    DateTimePrecision precision = DateTimePrecision.yyyy_MM_dd,
+  }) {
     final localeCode = locale.toString();
     final DateFormat dateFormat;
-    dateFormat = DateFormat.yMd(localeCode);
-    // switch (precision) {
-    //   case DateTimePrecision.yyyy:
-    //     dateFormat = DateFormat.y(localeCode);
-    //     break;
-    //   case DateTimePrecision.yyyy_MM:
-    //     dateFormat = DateFormat.yM(localeCode);
-    //     break;
-    //   case DateTimePrecision.yyyy_MM_dd:
-    //     dateFormat = DateFormat.yMd(localeCode);
-    //     break;
-    //   default:
-    //     return defaultText;
-    // }
+
+    switch (precision) {
+      case DateTimePrecision.yyyy:
+        dateFormat = DateFormat.y(localeCode);
+        break;
+      case DateTimePrecision.yyyy_MM:
+        dateFormat = DateFormat.yM(localeCode);
+        break;
+      case DateTimePrecision.yyyy_MM_dd:
+        dateFormat = DateFormat.yMd(localeCode);
+        break;
+      default:
+        return defaultText;
+    }
 
     return dateFormat.format(value);
   }
 }
 
 extension FDashDateTimeExtension on FhirDateTime {
-  String format(Locale locale, {String defaultText = ''}) {
+  String format(
+    Locale locale, {
+    String defaultText = '',
+    DateTimePrecision precision = DateTimePrecision.yyyy_MM_dd_T_HH_mm_ss_SSSZZ,
+  }) {
     final localeCode = locale.toString();
     final DateFormat dateFormat;
     final japanese = locale.languageCode == 'ja';
-    dateFormat = (!japanese)
-        ? DateFormat.yMd(localeCode).add_jm()
-        : DateFormat('y年M月d日', localeCode).add_jm();
-    // switch (precision) {
-    //   case DateTimePrecision.yyyy_MM_dd_T_HH_mm_ss_SSSZZ:
-    //     dateFormat = (!japanese)
-    //         ? DateFormat.yMd(localeCode).add_jm()
-    //         : DateFormat('y年M月d日', localeCode).add_jm();
-    //     break;
-    //   case DateTimePrecision.yyyy:
-    //     dateFormat = (!japanese)
-    //         ? DateFormat.y(localeCode)
-    //         : DateFormat('y年', localeCode);
-    //     break;
-    //   case DateTimePrecision.yyyy_MM:
-    //     dateFormat = (!japanese)
-    //         ? DateFormat.yM(localeCode)
-    //         : DateFormat('y年M月', localeCode);
-    //     break;
-    //   case DateTimePrecision.yyyy_MM_dd:
-    //     dateFormat = (!japanese)
-    //         ? DateFormat.yMd(localeCode)
-    //         : DateFormat('y年M月d日', localeCode);
-    //     break;
-    //   case DateTimePrecision.invalid:
-    //   default:
-    //     return defaultText;
-    // }
+
+    switch (precision) {
+      case DateTimePrecision.yyyy_MM_dd_T_HH_mm_ss_SSSZZ:
+        dateFormat = (!japanese)
+            ? DateFormat.yMd(localeCode).add_jm()
+            : DateFormat('y年M月d日', localeCode).add_jm();
+        break;
+      case DateTimePrecision.yyyy:
+        dateFormat = (!japanese)
+            ? DateFormat.y(localeCode)
+            : DateFormat('y年', localeCode);
+        break;
+      case DateTimePrecision.yyyy_MM:
+        dateFormat = (!japanese)
+            ? DateFormat.yM(localeCode)
+            : DateFormat('y年M月', localeCode);
+        break;
+      case DateTimePrecision.yyyy_MM_dd:
+        dateFormat = (!japanese)
+            ? DateFormat.yMd(localeCode)
+            : DateFormat('y年M月d日', localeCode);
+        break;
+      case DateTimePrecision.invalid:
+      default:
+        return defaultText;
+    }
 
     return dateFormat.format(value!);
   }
@@ -141,7 +147,8 @@ String localizedFhirText(
     final translationLanguage = translation.extension_
         ?.extensionOrNull('lang')
         ?.valueCode
-        ?.value?.toLowerCase();
+        ?.value
+        ?.toLowerCase();
     final translationText =
         translation.extension_?.extensionOrNull('content')?.valueString;
     if (translationLanguage == null || translationText == null) {
