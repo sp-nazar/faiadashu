@@ -96,9 +96,7 @@ class QuestionnaireItemFillerTitle extends StatelessWidget {
                 if (shortTitleText != null) ...[
                   Text(
                     shortTitleText!,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 16),
                 ],
