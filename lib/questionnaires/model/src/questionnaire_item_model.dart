@@ -296,14 +296,23 @@ class QuestionnaireItemModel with Diagnosticable {
         : null;
   }
 
-  // RESEARCH: Should this be a RenderString?
-  /// Returns the `shortText` provided for the item, or null.
+  /// Returns the item short text in the questionnaire's selected locale.
+  /// Falls back to the original short text when no translation exists.
   String? get shortText {
-    return questionnaireItem.extension_
-        ?.extensionOrNull(
-          'http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-shortText',
-        )
-        ?.valueString;
+    final extension = questionnaireItem.extension_?.extensionOrNull(
+      'http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-shortText',
+    );
+    final value = extension?.valueString;
+    if (value == null) return null;
+
+    final locale = questionnaireModel.locale;
+    return locale == null
+        ? value
+        : localizedFhirText(
+            value,
+            extension?.valueStringElement?.extension_,
+            locale,
+          );
   }
 
   ItemMediaModel? _itemMedia;

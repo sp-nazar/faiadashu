@@ -8,10 +8,12 @@ class QuestionnaireItemFillerTitle extends StatelessWidget {
   final Widget? leading;
   final Widget? help;
   final String htmlTitleText;
+  final String? shortTitleText;
   final String semanticsLabel;
 
   const QuestionnaireItemFillerTitle._({
     required this.htmlTitleText,
+    this.shortTitleText,
     this.leading,
     this.help,
     required this.semanticsLabel,
@@ -48,13 +50,26 @@ class QuestionnaireItemFillerTitle extends StatelessWidget {
               : '</p>';
 
       final prefixText = fillerItem.prefix;
+      final candidateShortText = questionnaireItemModel.shortText?.trim();
+      // shortText is a separate heading for questions. Keep the traditional
+      // inline prefix for groups, displays and distinct prefixes (e.g. "1.").
+      final shortTitleText = questionnaireItemModel.isQuestion &&
+              candidateShortText != null &&
+              candidateShortText.isNotEmpty
+          ? candidateShortText
+          : null;
+      final showInlinePrefix = prefixText != null &&
+          (shortTitleText == null ||
+              prefixText.plainText.trim().toLowerCase() !=
+                  shortTitleText.toLowerCase());
 
-      final htmlTitleText = (prefixText != null)
-          ? '$openStyleTag${prefixText.xhtmlText}&nbsp;${text.xhtmlText}$requiredTag$closeStyleTag'
+      final htmlTitleText = showInlinePrefix
+          ? '$openStyleTag${prefixText!.xhtmlText}&nbsp;${text.xhtmlText}$requiredTag$closeStyleTag'
           : '$openStyleTag${text.xhtmlText}$requiredTag$closeStyleTag';
 
       return QuestionnaireItemFillerTitle._(
         htmlTitleText: htmlTitleText,
+        shortTitleText: shortTitleText,
         leading: leading,
         help: help,
         semanticsLabel: text.plainText,
@@ -74,28 +89,41 @@ class QuestionnaireItemFillerTitle extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: Text.rich(
-              TextSpan(
-                children: <InlineSpan>[
-                  if (leading != null)
-                    WidgetSpan(
-                      alignment: PlaceholderAlignment.middle,
-                      child: leading,
-                    ),
-                  if (leading != null)
-                    const WidgetSpan(
-                      child: SizedBox(
-                        width: 16.0,
-                      ),
-                    ),
-                  HTML.toTextSpan(
-                    context,
-                    htmlTitleText,
-                    defaultTextStyle: Theme.of(context).textTheme.bodyMedium,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (shortTitleText != null) ...[
+                  Text(
+                    shortTitleText!,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
                   ),
+                  const SizedBox(height: 6),
                 ],
-              ),
-              semanticsLabel: semanticsLabel,
+                Text.rich(
+                  TextSpan(
+                    children: <InlineSpan>[
+                      if (leading != null)
+                        WidgetSpan(
+                          alignment: PlaceholderAlignment.middle,
+                          child: leading,
+                        ),
+                      if (leading != null)
+                        const WidgetSpan(
+                          child: SizedBox(width: 16.0),
+                        ),
+                      HTML.toTextSpan(
+                        context,
+                        htmlTitleText,
+                        defaultTextStyle: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
+                  semanticsLabel: semanticsLabel,
+                ),
+              ],
             ),
           ),
           if (help != null) help,
